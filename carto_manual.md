@@ -1,7 +1,6 @@
 
 
 
-
 === So what is Carto ? === 
 
 Mapnik is a popular tool to render, that is display geographic information into images. 
@@ -18,7 +17,7 @@ There's a few concepts to keep in mind:
 
 = Format = 
 
-Before you even start, organize your data however you'd like. tilemill supports postgis, SHP, geojson, google docs, and maybe something else. 
+Before you even start, organize your data however you'd like. tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/)  and maybe something else. 
 
 However, if you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
 
