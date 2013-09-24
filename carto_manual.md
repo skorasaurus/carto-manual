@@ -27,11 +27,13 @@ Additionally: if your use postgres data, you want your layers to be as specific 
 
 Go see your postgres query selector for more information. 
 
-Here's a sample SQL query for a layer: 
+Here's a very sample SQL query for a layer: 
 
  (select shop from planet_osm_point where shop is not null) as points
 
-Shop is your table name, 
+ (see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of )
+
+Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you wnat. 
 
 
 ==== Styling === 
@@ -42,11 +44,36 @@ ohh, ahh, so how do I Make stuff look purdy ?
 
 Check out the comp-op page.  
 
-==Inheritance==
-
 
 to select a type='specifictypeofstreetforexample'  [also double quotes works as well but the tilemill designers have 
 use single quotes on a de facto basis. 
+
+==Inheritance==
+you'll want to be the field's name in single quotes. (if it's a text)
+
+CSS saves you time by inheritance, so very basic: 
+
+#place::small[type='neighbourhood'][zoom>=13][zoom<=20] {
+  text-name:'[name]';
+  text-face-name:@sans;
+  text-placement:point;
+  text-fill:@other_text;
+  text-size:10;
+  text-halo-fill:@other_halo;
+  text-halo-radius:1;
+  text-wrap-width: 30;
+  text-min-distance: 100;
+  text-avoid-edges: true;
+  text-label-position-tolerance: 10;
+  [zoom>=13] {
+    text-min-distance: 50;
+  }
+  [zoom>=14] {
+    text-size:11;
+    }
+
+ for zoom 14, it will have ALL of those characteristics that are included in the except, except for the text-size is now 11.  
+
 
 These are called 'attachments', :: this syntax. 
 
@@ -81,6 +108,12 @@ and
 #place [type='neighbourhood'][zoom>=13][zoom<=20] ::small ? 
 )
 
+
+multiple textures, casings for lines (if you want a road to be outside with a different color than what the inside of it is...), and so much more can be done with attachments..
+
+Like this example for a railroad. 
+
+
 #rail [zoom>=12][zoom<=21]::perpendicular-dashes  {
 
 line-cap: butt;
@@ -109,30 +142,17 @@ line-color: black;
 In the above rail instance, the perpendicular-dashes are drawn first, then the base-line are drawn. 
 
 
-you'll want to be the field's name in single quotes. (if it's a text)
+===Attachments====
 
-CSS saves you time by inheritance, so very basic: 
 
-#place::small[type='neighbourhood'][zoom>=13][zoom<=20] {
-  text-name:'[name]';
-  text-face-name:@sans;
-  text-placement:point;
-  text-fill:@other_text;
-  text-size:10;
-  text-halo-fill:@other_halo;
-  text-halo-radius:1;
-  text-wrap-width: 30;
-  text-min-distance: 100;
-  text-avoid-edges: true;
-  text-label-position-tolerance: 10;
-  [zoom>=13] {
-    text-min-distance: 50;
-  }
-  [zoom>=14] {
-    text-size:11;
-    }
+draw this stuff first, then draw this stuff first, then this stuff last. 
 
- for zoom 14, it will have ALL of those characteristics that are included in the except, except for the text-size is now 11.  
+but this destroys a lot of layering :/  ? 
+
+- (15mins of andy allen's talk)
+
+- can also be intensive i/o for rendering, better to filter your queries at the source. 
+
 
 
 
@@ -180,6 +200,7 @@ a more advanced example:
 
 SELECT way, waterway AS type, CASE WHEN tags->'seasonal'='yes' OR tags->'intermittent'='yes' THEN 'yes' ELSE 'no' END AS seasonal FROM planet_osm_line WHERE waterway IN ('river', 'canal', 'stream', 'ditch', 'drain')) AS data",
 
+
 AJ - 
     Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by always adding a new line after a comma, like this:
 
@@ -218,17 +239,45 @@ My experience has been that opacity gets set just once, for the whole layer, and
 https://github.com/mapbox/carto/issues/249
 
 
-===Attachments====
 
-draw this stuff first, then draw this stuff first, then this stuff last. 
+=========
 
-but this destroys at lot of layering :/ 
+Tilemill tooltips: 
+(assume you already know what tooltips are...)
 
-- (15mins of andy allen's talk)
+Yeah, you want awesome tooltips - (the content that is displayed when a user hover a marker with their cursor or when they click on a marker in your map) -
 
-- can also be intensive i/o for rendering, better to filter your queries at the source. 
+However, if you want something that is a little complicated, like custom images for each of your points, it can stil be 
+done although I would do this through leaflet instead of plotting them on a map in tilemill. 
 
-============
+For example, I wanted to change the width of the tooltip so I could have a larger image display without 
+the user having to scroll, as shown in the picture: 
+
+
+What you'll need to do: 
+
+So, the default styling for the Tooltips is located at: https://github.com/mapbox/wax/blob/master/theme/controls.css
+
+Look for the relevant class and property within the CSS file, and place your edited code within the 
+in this case, it's the class map-tooltip (shown below)
+
+<style>
+.map-tooltip {
+ max-width:400px !important;
+}
+</style>
+
+And insert the <style> and </style> surrounding the css code
+
+As mentioned here- http://support.mapbox.com/discussions/tilemill/1460-customizing-the-tool-tips
+The changed width of the tooltip will not appear in Tilemill after. once you upload them to mapbox's server and view the your map online, 
+you will see your changes. 
+Some changes, like the opacity of the tooltip box, will display within Tilemill. 
+
+Tooltips: 
+https://github.com/mapbox/wax/blob/master/theme/controls.css
+- how to change the font ? font is not in there ?! 
+- you cannot unless you have wax on your server, because of security concerns, see: 
 
 
 ==== 
@@ -248,6 +297,22 @@ See for more details: https://github.com/yohanboniface/CartoCC
 
 Also written by the author of cartocc, is the carto-sublime package in early development:
 https://github.com/yohanboniface/Carto-sublime
+
+
+=====
+i need help?! checkout:
+
+#mapbox on freenode (irc)
+support.mapbox.com 
+and the gis.stackexchange
+
+for crashing: 
+
+if you're using ubuntu, go to the directory where tilemill is installed in your terminal, , and then type in ./index.js 
+- tilemill will startup. /usr/share/mapbox/
+
+mac - i think yeah look for ~/Library/Logs/DiagnosticReports/node
+(if its a node error)
 
 
 ENHANCEMENT TICKET TO Make: 
