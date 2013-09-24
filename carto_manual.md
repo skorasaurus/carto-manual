@@ -1,7 +1,6 @@
 
 
-
-=== So what is Carto ? === 
+===So what is Carto ?=== 
 
 Mapnik is a popular tool to render, that is display geographic information into images. 
 
@@ -42,7 +41,7 @@ Shop is your column name, planet_osm_point is your table name and points is an a
 ohh, ahh, so how do I Make stuff look purdy ? 
 
 
-Check out the comp-op page.  
+Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
 
 
 to select a type='specifictypeofstreetforexample'  [also double quotes works as well but the tilemill designers have 
@@ -277,7 +276,11 @@ Some changes, like the opacity of the tooltip box, will display within Tilemill.
 Tooltips: 
 https://github.com/mapbox/wax/blob/master/theme/controls.css
 - how to change the font ? font is not in there ?! 
-- you cannot unless you have wax on your server, because of security concerns, see: 
+- you cannot unless you have wax on your server, because of security concerns, see:
+- 
+
+One drawback that i'm immediately noticing too, to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again, 
+
 
 
 ==== 
