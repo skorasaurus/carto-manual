@@ -16,7 +16,8 @@ There's a few concepts to keep in mind:
 
 = Format = 
 
-Before you even start, organize your data however you'd like. tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/)  and maybe something else. 
+Before you even start, organize your data however you'd like. tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
+Make sure that its in the same projection used in tilemill, EPSG:4326. 
 
 However, if you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
 
@@ -32,9 +33,20 @@ Here's a very sample SQL query for a layer:
 
  (see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of )
 
-Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you wnat. 
+Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
+
+ What data should go in each layer ? 
+ Should I make one for all roads ? one for railways ? Labels ? 
+ - This question really confused me as a newbie tilemill user. 
+ This is a question is a bit difficult to answer because it depends on the map that you're making. Generally, The more features that 
+your map will include, the more layers that you'll want. 
 
 
+If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
+you'll likely have multiple layers there (one for bridges, one for highways, etc)
+
+
+One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)  
 ==== Styling === 
 
 
