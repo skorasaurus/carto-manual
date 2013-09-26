@@ -1,4 +1,3 @@
-
 ===So what is Carto ?=== 
 
 Mapnik is a popular tool to render, that is display geographic information into images. 
@@ -46,17 +45,8 @@ you'll likely have multiple layers there (one for bridges, one for highways, etc
 
 
 One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)  
-==== Styling === 
 
 
-ohh, ahh, so how do I Make stuff look purdy ? 
-
-
-Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
-
-
-to select a type='specifictypeofstreetforexample'  [also double quotes works as well but the tilemill designers have 
-use single quotes on a de facto basis. 
 
 ==Inheritance==
 you'll want to be the field's name in single quotes. (if it's a text)
@@ -83,6 +73,20 @@ CSS saves you time by inheritance, so very basic:
     }
 ```
  for zoom 14, it will have ALL of those characteristics that are included in the except, except for the text-size is now 11.  
+
+
+==== Styling === 
+
+
+ohh, ahh, so how do I Make stuff look purdy ? 
+
+
+Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
+
+
+to select a type='specifictypeofstreetforexample'  [also double quotes works as well but the tilemill designers have 
+use single quotes on a de facto basis. 
+
 
 
 ===Attachments====
@@ -282,15 +286,15 @@ AJ -
 You can also use negatives, like: 
 [display_designation != 'National Park'][display_designation != 'National Park & Preserve']
 (display_designation is the name of a row in your data)
-
+==== 
 ==Classes==: 
 
 
 Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. This sort of thing shouldn’t work, or should perhaps throw a warning:
-
+```
 #foo[bar=1] { opacity: 0.2 }
 #foo[bar=2] { opacity: 0.8 }
-
+``` 
 My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict which one would win in this case.
 
 
@@ -299,8 +303,7 @@ https://github.com/mapbox/carto/issues/249
 
 
 
-=========
-
+====
 Tilemill tooltips: 
 (assume you already know what tooltips are...)
 
