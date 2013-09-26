@@ -33,6 +33,11 @@ Here's a very sample SQL query for a layer:
 
 Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
 
+
+=== 
+Things that I don't know where should go in this, but you should know before editing more in tilemill and that I really wish I knew when I 
+started using tilemill 
+
  What data should go in each layer ? 
  Should I make one for all roads ? one for railways ? Labels ? 
  - This question really confused me as a newbie tilemill user. 
@@ -41,12 +46,31 @@ your map will include, the more layers that you'll want.
 
 
 If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
-you'll likely have multiple layers there (one for bridges, one for highways, etc)
+you'll likely have multiple layers there (one for bridges, one for highways, etc). 
+Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish)
+and more detailed (18+). 
 
 
 One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)  
 
+what programs do I use to edit my data ? 
+- you can edit your code within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs),
+this is especially useful when you have multiple MSS files in your browser. 
 
+(also note, the order of your MSS files, from left to right within your tilemill - does not matter). 
+Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
+
+
+Also, if you do not know by now, you can launch multiple instances of tilemill. useful if you're working on multiple projects 
+at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in 
+git for whatever reason. 
+
+go to where your tilemill install is located (ADD this) for 
+then in the terminal, type in: ./index.js --server=true 
+
+now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
+
+=== 
 
 ==Inheritance==
 you'll want to be the field's name in single quotes. (if it's a text)
