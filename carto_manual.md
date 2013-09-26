@@ -1,5 +1,4 @@
 
-
 ===So what is Carto ?=== 
 
 Mapnik is a popular tool to render, that is display geographic information into images. 
@@ -31,7 +30,7 @@ Here's a very sample SQL query for a layer:
 
  (select shop from planet_osm_point where shop is not null) as points
 
- (see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of )
+ (if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
 
 Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
 
@@ -63,7 +62,7 @@ use single quotes on a de facto basis.
 you'll want to be the field's name in single quotes. (if it's a text)
 
 CSS saves you time by inheritance, so very basic: 
-
+```
 #place::small[type='neighbourhood'][zoom>=13][zoom<=20] {
   text-name:'[name]';
   text-face-name:@sans;
@@ -82,18 +81,21 @@ CSS saves you time by inheritance, so very basic:
   [zoom>=14] {
     text-size:11;
     }
-
+```
  for zoom 14, it will have ALL of those characteristics that are included in the except, except for the text-size is now 11.  
 
 
-These are called 'attachments', :: this syntax. 
+===Attachments====
 
-These are pretty damn dope, extend the capabilities of Tilemill, and wish I learned these earlier. 
+When you see the :: being used, they're called attachments. 
 
-#layername[yourfilter-isthattheyarecalled]::selector { 
+These are pretty damn dope, extend the capabilities of Tilemill, extend your mapmaking capabilities and wish I learned these earlier.
+
+```
+#layername[yourfilter-isthatwhatthisiscalled]::selector { 
 
 }
-
+```
 you can name your selector whatever you want, it's arbitrary. 
 
  Also repeated in http://www.mapbox.com/tilemill/docs/manual/carto/ (include?)
@@ -101,30 +103,68 @@ you can name your selector whatever you want, it's arbitrary.
  Note that newsymbol is not a special keyword but an arbitrary name chosen by the user. To help keep track of different symbolizers you can name additional symbolizers whatever makes sense for the situation. Some examples: #road::casing, #coastline::glow_inner, #building::shadow.
 
 Returning to our previous example, declaring the second rule will add a blue glow on top of the red line instead of replacing it:
-
+```
 #layer {
-   line-color: #C00;
+   line-color: red;
    line-width: 1;
 }
 
 #layer::glow {
-   line-color: #0AF;
+   line-color: blue;
    line-opacity: 0.5;
    line-width: 4;
 }  
+```
+This glow is only possible because of the line-opacity rule. Try removing that and then click save. You'll now only see a blue line. 
 
-(Wwhat's the diff between: 
+
+Attachment style: 
+
+there's no difference  between: 
+```
+#layer {
+  ::outline {
+    line-width: 6;
+    line-color: black;
+  }
+  ::inline {
+    line-width: 2;
+    line-color: white;
+  }
+}
+```
+and 
+```
+#layer::outline {
+    line-width: 6;
+    line-color: black;
+}
+#layer::inline {
+    line-width: 2;
+    line-color: white;
+}
+```
+
+first version is a little easier to read :) 
+(And has been adopted by openstreetmap-carto led by andy allen, and ybon, math1985 agreed)
+
+AJ Ashton - 
+I don't really have a preference and will do either or both depending on the project and the data. But for OSM-Carto I think the no-repeat approach is a good fit, and it's good to have that kind of consistency on a collaborative project.
+
+
+```
+(What's the diff between: 
 #place::small[type='neighbourhood'][zoom>=13][zoom<=20] 
 and 
 #place [type='neighbourhood'][zoom>=13][zoom<=20] ::small ? 
 )
-
+```
 
 multiple textures, casings for lines (if you want a road to be outside with a different color than what the inside of it is...), and so much more can be done with attachments..
 
 Like this example for a railroad. 
 
-
+```
 #rail [zoom>=12][zoom<=21]::perpendicular-dashes  {
 
 line-cap: butt;
@@ -149,11 +189,11 @@ line-color: black;
 [zoom>=18] { line-width: 2; }
 [zoom>=20] { line-width: 2.25; }
 }
+```
 
 In the above rail instance, the perpendicular-dashes are drawn first, then the base-line are drawn. 
 
 
-===Attachments====
 
 
 draw this stuff first, then draw this stuff first, then this stuff last. 
@@ -193,23 +233,31 @@ In the following example, here's a postgresql query of a railway layer.
 so you can reference yard, and as a selector and it will represent that selection you made in the SQL layer. (when railway row has values of spur or siding)
 
 
-
+```
 #railway[type='yard']
 {
   your rules for yard
 }
+``` 
 
+```
 #railway[type='main']
 {
   your rules for main
 }
+```
+
 see: https://github.com/hotosm/HDM-CartoCSS/blob/master/roads.mss
 
 a more advanced example:
+```
  SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail",
+```
 
-
+or: 
+```
 SELECT way, waterway AS type, CASE WHEN tags->'seasonal'='yes' OR tags->'intermittent'='yes' THEN 'yes' ELSE 'no' END AS seasonal FROM planet_osm_line WHERE waterway IN ('river', 'canal', 'stream', 'ditch', 'drain')) AS data",
+```
 
 
 AJ - 
