@@ -69,6 +69,7 @@ go to where your tilemill install is located (ADD this) for
 then in the terminal, type in: ./index.js --server=true 
 
 now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
+[NOTE This URL was recently changed in a tilemill commit, UPDATE later]. 
 
 === 
 
@@ -76,8 +77,9 @@ now, you can go to your web browser and type in localhost:20009 and your tilemil
 you'll want to be the field's name in single quotes. (if it's a text)
 
 CSS saves you time by inheritance, so very basic: 
+
 ```
-#place::small[type='neighbourhood'][zoom>=13][zoom<=20] {
+#place[type='neighbourhood'][zoom>=13][zoom<=20] {
   text-name:'[name]';
   text-face-name:@sans;
   text-placement:point;
@@ -96,8 +98,10 @@ CSS saves you time by inheritance, so very basic:
     text-size:11;
     }
 ```
- for zoom 14, it will have ALL of those characteristics that are included in the except, except for the text-size is now 11.  
-
+ Here, for zoom 13 and higher, the text-min-distance is now 50 and the rest of the characteristics that are included in first selection,
+ for zoom 14 and higher, it will have ALL of those characteristics that are included in first selection, except for the text-size is now 11.  
+ Also note that it's standard practice to use >=  when you write out your zoom queries and keep it consistent. Wish I knew why, but I haven't had any problems result from adapting this. 
+ 
 
 ==== Styling === 
 
@@ -143,10 +147,60 @@ Returning to our previous example, declaring the second rule will add a blue glo
    line-width: 4;
 }  
 ```
+
 This glow is only possible because of the line-opacity rule. Try removing that and then click save. You'll now only see a blue line. 
 
+Important! 
+Remember the, painter's algorithm. One of the most important concepts that helped me understand Tilemill. 
 
-Attachment style: 
+WITH ATTACHMENTS, 
+Objects are drawn over objects. Lines, polygons (objects?) that are written first in the MSS file will be drawn first, 
+later objects will be drawn over the earlier ones. 
+
+Let's explain how this works with attachments and the previous example, 
+if you remove the line-opacity and rerender, you'll see just a blue line. 
+
+
+but if we reverse the two colors, like the following : 
+
+```
+#countries {
+   line-color: red;
+   line-width: 4;
+}
+
+#countries::glow {
+   line-color: blue;
+   line-width: 2;
+}
+```
+
+In this case, you will see a blue line with a red outline or a red glow ! Why ? the red line with a width of 4, was drawn first, 
+and then a line color blue, with a width of 2, was drawn on top of the red line. 
+
+With attachments, the line is drawn over the previous object ! 
+
+If you don't use an attachment, like: 
+
+
+```
+#countries {
+   line-color: red;
+   line-width: 4;
+}
+
+#countries {
+   line-color: blue;
+   line-width: 2;
+}
+```
+you'll only end up with a blue line that is 2 pixels wide, because the results are overwritten. 
+
+
+(http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
+
+
+Now, Attachment style: 
 
 there's no difference  between: 
 ```
