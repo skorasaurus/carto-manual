@@ -27,7 +27,9 @@ Go see your postgres query selector for more information.
 
 Here's a very sample SQL query for a layer: 
 
+```
  (select shop from planet_osm_point where shop is not null) as points
+``` 
 
  (if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
 
@@ -35,27 +37,31 @@ Shop is your column name, planet_osm_point is your table name and points is an a
 
 
 === 
-Things that I don't know where should go in this, but you should know before editing more in tilemill and that I really wish I knew when I 
-started using tilemill 
+First things first: 
+Things that in tilemill and that I really wish I knew when I started using tilemill:
 
  What data should go in each layer ? 
  Should I make one for all roads ? one for railways ? Labels ? 
  - This question really confused me as a newbie tilemill user. 
- This is a question is a bit difficult to answer because it depends on the map that you're making. Generally, The more features that 
-your map will include, the more layers that you'll want. 
+ This is a question is a bit difficult to answer because it depends on the map that you're making. 
+Generally, The more features that your map will include, the more layers that you'll want. Do not try to put everything in one layer, 
+even if all of your data is in one file (even if you only have 1 shapefile?). 
 
 
 If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
-you'll likely have multiple layers there (one for bridges, one for highways, etc). 
+you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). 
 Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish)
-and more detailed (18+). 
+and more detailed (18+), plus separate ones or all tunnels, all bridges. 
 
 
-One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)  
+One applicable rule that is applicable for nearly every tilemill map is that you should have a layer 
+solely dedicated to labels :)  
 
 what programs do I use to edit my data ? 
-- you can edit your code within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs),
-this is especially useful when you have multiple MSS files in your browser. 
+- you can edit your code within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). 
+this is especially useful when you have multiple MSS files in your browser. If you edit your file in your text editor, tilemill will automatically
+should automatically detect the changes and allow you to click save within tilemill [verify]
+
 
 (also note, the order of your MSS files, from left to right within your tilemill - does not matter). 
 Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
