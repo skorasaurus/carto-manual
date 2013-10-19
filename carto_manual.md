@@ -1,37 +1,34 @@
 ===So what is Carto ?=== 
 
-Mapnik is a popular tool to render, that is display geographic information into images. 
+Mapnik is a popular tool to render, that is display, geographic information into images. 
 
-Mapnik's code instructs what map features (roads, rivers, buildings)) to display and what these features should look like (this is known as rendering), is in XML. It's very difficult to read. In 2009(ish?), cascadenik was made to help simplify this. 
+Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. It's very difficult to read. In 2009(ish?), cascadenik was made to help simplify this. 
 
 Then, carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and is superceding cascadenik. 
 
-It's like the CSS language (and less), it's used to style maps in the application, tilemill. 
+It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill. 
 
-There's a few concepts to keep in mind: 
 
 == Organizing your data == 
 
-= Format = 
-
-Before you even start, organize your data however you'd like. tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
+Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
 Make sure that its in the same projection used in tilemill, EPSG:4326. 
 
 However, if you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
 
 SQL Queries: 
 
-Additionally: if your use postgres data, you want your layers to be as specific as possible. Just as using select * FROM yourtablename is inefficient in your postgresql queries in general, because you're selecting everything, doing this in tilemill will also increase the time that . Simply put, you only want to queries so that load the data that you will want to display on your map. 
+Additionally: If you're using postgis DB, you want your layers to be as specific as possible. Just as using select * FROM yourtablename is inefficient in your postgresql queries in general, because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map. 
 
-Go see your postgres query selector for more information. 
-
-Here's a very sample SQL query for a layer: 
+Here's a very simple SQL query for a layer: 
 
 ```
  (select shop from planet_osm_point where shop is not null) as points
 ``` 
 
  (if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
+
+Let's show what this means: 
 
 Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
 
@@ -73,9 +70,11 @@ git for whatever reason.
 
 go to where your tilemill install is located (ADD this) for 
 then in the terminal, type in: ./index.js --server=true 
-
 now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
-[NOTE This URL was recently changed in a tilemill commit, UPDATE later]. 
+
+(SUPER user alert, ignore the following paragraph if you're not running tilemill master.)If your master is from september 26, 2013 or newer 
+https://github.com/mapbox/tilemill/commit/03ffc6353fddf42a5c965710dd4c9d5e4b6ae65a
+use 127.0.0.1:20008 instead)
 
 === 
 
