@@ -293,6 +293,7 @@ but this destroys a lot of layering :/  ?
 - can also be intensive i/o for rendering, better to filter your queries at the source. 
 
 
+=====
 
 
 
@@ -367,9 +368,8 @@ AJ -
 <ajashton> down side is that `x AND (y OR z)` has to instead be `(x AND Y) OR (x AND z)`
 <ajashton> (not in that syntax, tho)
 
-You can also use negatives, like: 
-[display_designation != 'National Park'][display_designation != 'National Park & Preserve']
-(display_designation is the name of a row in your data)
+You can also use negatives, like
+```[display_designation != 'National Park'][display_designation != 'National Park & Preserve']``` (display_designation is the name of a row in your data)
 ==== 
 ==Classes==: 
 
@@ -407,11 +407,11 @@ So, the default styling for the Tooltips is located at: https://github.com/mapbo
 Look for the relevant class and property within the CSS file, and place your edited code within the 
 in this case, it's the class map-tooltip (shown below)
 
-<style>
+```<style>
 .map-tooltip {
  max-width:400px !important;
 }
-</style>
+</style>```
 
 And insert the <style> and </style> surrounding the css code
 
@@ -428,6 +428,13 @@ https://github.com/mapbox/wax/blob/master/theme/controls.css
 
 One drawback that i'm immediately noticing too, to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again, 
 
+====
+My styling isn't displaying das I intended ? Help ? 
+
+Most common culprit of this is that: 
+- your data isn't included in the layer you're styling 
+Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)
+If there's too many features in the list and you're using SQL, put your query into an SQL editor like pgadmin. 
 
 
 ==== 
