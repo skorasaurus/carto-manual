@@ -34,8 +34,7 @@ Shop is your column name, planet_osm_point is your table name and points is an a
 
 
 === 
-First things first: 
-Things that in tilemill and that I really wish I knew when I started using tilemill:
+First things first (aka: things that in tilemill and that I really wish I knew when I started using tilemill:
 
  What data should go in each layer ? 
  Should I make one for all roads ? one for railways ? Labels ? 
@@ -59,6 +58,7 @@ what programs do I use to edit my data ?
 this is especially useful when you have multiple MSS files in your browser. If you edit your file in your text editor, tilemill will automatically
 should automatically detect the changes and allow you to click save within tilemill [verify]
 
+For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes... double quotes work as well, but it's just a standard practice by other tilemill users to use single quotes. 
 
 (also note, the order of your MSS files, from left to right within your tilemill - does not matter). 
 Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
@@ -78,7 +78,8 @@ use 127.0.0.1:20008 instead)
 
 === 
 
-==Inheritance==
+==**Inheritance**==
+
 you'll want to be the field's name in single quotes. (if it's a text)
 
 CSS saves you time by inheritance, so very basic: 
@@ -110,16 +111,23 @@ CSS saves you time by inheritance, so very basic:
 
 ==== Styling === 
 
-
 ohh, ahh, so how do I Make stuff look purdy ? 
 
 
-Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
+- Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
 
+===Reading the API=== 
 
-to select a type='specifictypeofstreetforexample'  [also double quotes works as well but the tilemill designers have 
-use single quotes on a de facto basis. 
+So, the api can be difficult to read if you're not familiar with reading APIs. 
 
+For example, see [The polygon-pattern-file,](https://www.mapbox.com/carto/api/2.1.0/#polygon-pattern) 
+
+``` #processed_p[zoom>=10] {
+polygon-pattern-file:url('img/imagename.png'); 
+} ```
+This url path assumes that imagename.png is located in a subfolder of your project, named img. 
+
+Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless" ideally ones that are 256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
 
 
 ===Attachments====
@@ -231,12 +239,12 @@ and
     line-color: white;
 }
 ```
-
 first version is a little easier to read :) 
-(And has been adopted by openstreetmap-carto led by andy allen, and ybon, math1985 agreed)
+(And has been adopted by openstreetmap-carto, osm's standard stylesheet) 
 
 AJ Ashton - 
 I don't really have a preference and will do either or both depending on the project and the data. But for OSM-Carto I think the no-repeat approach is a good fit, and it's good to have that kind of consistency on a collaborative project.
+
 
 
 ```
@@ -342,12 +350,6 @@ a more advanced example:
  SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail",
 ```
 
-or: 
-```
-SELECT way, waterway AS type, CASE WHEN tags->'seasonal'='yes' OR tags->'intermittent'='yes' THEN 'yes' ELSE 'no' END AS seasonal FROM planet_osm_line WHERE waterway IN ('river', 'canal', 'stream', 'ditch', 'drain')) AS data",
-```
-
-
 AJ - 
     Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by always adding a new line after a comma, like this:
 
@@ -431,9 +433,10 @@ One drawback that i'm immediately noticing too, to styling your markers in tilem
 My styling isn't displaying das I intended ? Help ? 
 
 Most common culprit of this is that: 
-- your data isn't included in the layer you're styling 
-Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)
-If there's too many features in the list and you're using SQL, put your query into an SQL editor like pgadmin. 
+- your data isn't included in the layer you're styling! 
+Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)(NOTE: There may be some cases where this isn't correct - especially if you have many features in your layer) so follow the next step:  
+
+you're using SQL, put your query into an SQL editor like pgadmin. 
 
 
 ==== 
