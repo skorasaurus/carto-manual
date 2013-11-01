@@ -210,6 +210,22 @@ If you don't use an attachment, like:
 ```
 you'll only end up with a blue line that is 2 pixels wide, because the results are overwritten. 
 
+If you use attachments consecutively, like: 
+
+```
+#layer::first {
+   line-color: red;
+   line-width: 4;
+}
+#layer::glow {
+   line-color: blue;
+   line-width: 2;
+}
+``` 
+They will have the same action as the early image (not immediately before, but the 2nd one before this example)... 
+the blue glow will be atop the red line. For simplicity's sake, you shouldn't need to do this, just remove the attachment from
+the first layer
+
 
 (http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
 
@@ -247,9 +263,24 @@ AJ Ashton -
 I don't really have a preference and will do either or both depending on the project and the data. But for OSM-Carto I think the no-repeat approach is a good fit, and it's good to have that kind of consistency on a collaborative project.
 
 
+But remember, that if you are using multiple attachments: 
+
+like: 
+```
 
 ```
-(What's the diff between: 
+
+and 
+``` 
+
+
+```
+Even though you have used a selector in the first attachment, the 
+
+
+
+(What's the diff between:
+``` 
 #place::small[type='neighbourhood'][zoom>=13][zoom<=20] 
 and 
 #place [type='neighbourhood'][zoom>=13][zoom<=20] ::small ? 
