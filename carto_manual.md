@@ -125,6 +125,7 @@ For example, see [The polygon-pattern-file,](https://www.mapbox.com/carto/api/2.
 ``` #processed_p[zoom>=10] {
 polygon-pattern-file:url('img/imagename.png'); 
 } ```
+
 This url path assumes that imagename.png is located in a subfolder of your project, named img. 
 
 Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless" ideally ones that are 256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
@@ -307,13 +308,42 @@ but this destroys a lot of layering :/  ?
 ====================
 Selections/selectors within the Layer:
 
+There are times when even if you filter the objects that you want in your layer, 
+you want to customize styling based on certain properties within your layer. 
+
+Tips: 
+- item
+
+-  Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by always adding a new line after a comma, like this:
+
+```#parkpoint[zoom=10][display_designation = 'National Park'],
+    #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
+    } ```
+```
+<bFlood> ajashton: is there a way to perform boolean ops between filters? so instead of #layer [field=foo][field=bar]  we could do [field1=foo] AND [field2=bar]?
+<ajashton> #layer[field1=foo][field2=bar] is an AND operation
+<ajashton> #layer[field1=foo], #layer[field2=bar] is an OR operation
+<bFlood> sorry, meant OR
+<bFlood> got it, thx
+<ajashton> you can also use nesting, like #layer { [field1=foo],[field2=bar] { /* style */ } } ``` 
+
+<bFlood> one more, for complex expressions can you use parens to separate the logic: #layer {[field3=baa],( [field1=foo][field2=bar])
+<ajashton> bFlood, no parens. Everything between commas is totally separate
+<ajashton> down side is that `x AND (y OR z)` has to instead be `(x AND Y) OR (x AND z)`
+<ajashton> (not in that syntax, tho)
+
+You can also use negatives as a selector in carto, by using: !=
+
+``` [display_designation != 'National Park'][display_designation != 'National Park & Preserve'] ``` 
+
+(display_designation is the name of a row in your data )
+
+move me below 
 bFlood> how do you change the drawing order in Tilemill?
 <ybon> bFlood: you can change the order of the layers
 <bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window?
 <ybon> the layers window
 <ybon> drag the icon on the left
-
-
 
 As stated earlier, you want your layers to only include the geo_data that you want, BUT you organize your 
 by uses. 
@@ -350,27 +380,7 @@ a more advanced example:
  SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail",
 ```
 
-AJ - 
-    Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by always adding a new line after a comma, like this:
 
-    #parkpoint[zoom=10][display_designation = 'National Park'],
-    #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
-
-
-<bFlood> ajashton: is there a way to perform boolean ops between filters? so instead of #layer [field=foo][field=bar]  we could do [field1=foo] AND [field2=bar]?
-<ajashton> #layer[field1=foo][field2=bar] is an AND operation
-<ajashton> #layer[field1=foo], #layer[field2=bar] is an OR operation
-<bFlood> sorry, meant OR
-<bFlood> got it, thx
-<ajashton> you can also use nesting, like #layer { [field1=foo],[field2=bar] { /* style */ } }
-
-<bFlood> one more, for complex expressions can you use parens to separate the logic: #layer {[field3=baa],( [field1=foo][field2=bar])
-<ajashton> bFlood, no parens. Everything between commas is totally separate
-<ajashton> down side is that `x AND (y OR z)` has to instead be `(x AND Y) OR (x AND z)`
-<ajashton> (not in that syntax, tho)
-
-You can also use negatives, like
-```[display_designation != 'National Park'][display_designation != 'National Park & Preserve']``` (display_designation is the name of a row in your data)
 ==== 
 ==Classes==: 
 
