@@ -34,3 +34,7 @@ TODO:
  3. messing w/ MSS files. 
  4.  STYLE (and profile, wooo!)
  5. 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/skorasaurus/carto-manual/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
