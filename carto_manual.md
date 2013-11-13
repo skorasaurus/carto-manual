@@ -321,21 +321,6 @@ line-color: black;
 In the above rail instance, the perpendicular-dashes are drawn first, then the base-line are drawn. 
 
 
-
-
-draw this stuff first, then draw this stuff first, then this stuff last. 
-
-but this destroys a lot of layering :/  ? 
-
-- (15mins of andy allen's talk)
-
-- can also be intensive i/o for rendering, better to filter your queries at the source. 
-
-
-=====
-
-
-
 ====================
 Selections/selectors within the Layer:
 
@@ -345,7 +330,10 @@ you want to customize styling based on certain properties within your layer.
 Tips: 
 - item
 
--  Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by always adding a new line after a comma, like this:
+-  Adding a comma starts a whole new selector - meaning aspects of your previous selector 
+-  like the layer and zoom level) are not considered. So you need to repeat yourself a bit 
+-  and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by 
+-  always adding a new line after a comma, like this:
 
 ```#parkpoint[zoom=10][display_designation = 'National Park'],
     #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
@@ -416,12 +404,14 @@ a more advanced example:
 ==Classes==: 
 
 
-Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. This sort of thing shouldn’t work, or should perhaps throw a warning:
+Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. 
+This sort of thing shouldn’t work, or should perhaps throw a warning:
 ```
 #foo[bar=1] { opacity: 0.2 }
 #foo[bar=2] { opacity: 0.8 }
 ``` 
-My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict which one would win in this case.
+My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict 
+which one would win in this case.
 
 
 
@@ -471,6 +461,7 @@ https://github.com/mapbox/wax/blob/master/theme/controls.css
 One drawback that i'm immediately noticing too, to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again, 
 
 ====
+
 My styling isn't displaying das I intended ? Help ? 
 
 Most common culprit of this is that: 
