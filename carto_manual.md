@@ -58,18 +58,15 @@ what programs do I use to edit my data ?
 this is especially useful when you have multiple MSS files in your browser. If you edit your file in your text editor, tilemill will automatically
 should automatically detect the changes and allow you to click save within tilemill [verify]
 
-For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes... double quotes work as well, but it's just a standard practice by other tilemill users to use single quotes. 
+For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other tilemill users to use single quotes. 
 
-(also note, the order of your MSS files, from left to right within your tilemill - does not matter). 
+* the order of your MSS files, from left to right within your tilemill - does not matter). 
 Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
 
 
-Also, if you do not know by now, you can launch multiple instances of tilemill. useful if you're working on multiple projects 
-at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in 
-git for whatever reason. 
+* Also, if you do not know by now, you can launch multiple instances of tilemill. useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason. 
 
-go to where your tilemill install is located (ADD this) for 
-then in the terminal, type in: ./index.js --server=true 
+* You can access Tilemill through your web browser. Do this by: In the terminal, go to the terminal where your tilemill install is located (ADD this). In your directory, type in: ./index.js --server=true 
 now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
 
 (SUPER user alert, ignore the following paragraph if you're not running tilemill master.)If your master is from september 26, 2013 or newer 
@@ -128,7 +125,7 @@ polygon-pattern-file:url('img/imagename.png');
 
 This url path assumes that imagename.png is located in a subfolder of your project, named img. 
 
-Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless" ideally ones that are 256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
+Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless." They should be  256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
 
 
 ===Attachments====
