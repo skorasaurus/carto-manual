@@ -12,13 +12,13 @@ It's like the CSS language (and less.js), it's used to style maps in the applica
 == Organizing your data == 
 
 Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
-Make sure that its in the same projection used in tilemill, EPSG:4326. 
+Make sure that data is in the same projection used in Tilemill, EPSG:4326. 
 
-However, if you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
+If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
 
 SQL Queries: 
 
-Additionally: If you're using postgis DB, you want your layers to be as specific as possible. Just as using select * FROM yourtablename is inefficient in your postgresql queries in general, because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map. 
+Additionally: If you're using a postgis DB, you want your layers to be as specific as possible. Just as using ```select * FROM yourtablename``` is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map. 
 
 Here's a very simple SQL query for a layer: 
 
@@ -26,50 +26,44 @@ Here's a very simple SQL query for a layer:
  (select shop from planet_osm_point where shop is not null) as points
 ``` 
 
- (if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
+(if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
 
 Let's show what this means: 
 
 Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
 
 
-=== 
+----
 First things first (aka: things that in tilemill and that I really wish I knew when I started using tilemill:
 
- What data should go in each layer ? 
- Should I make one for all roads ? one for railways ? Labels ? 
+ *What data should go in each layer?* 
+ *Should I make one for all roads? railways? Labels?* 
  - This question really confused me as a newbie tilemill user. 
  This is a question is a bit difficult to answer because it depends on the map that you're making. 
-Generally, The more features that your map will include, the more layers that you'll want. Do not try to put everything in one layer, 
-even if all of your data is in one file (even if you only have 1 shapefile?). 
-
+Generally, The more features that your map will include, the more layers that you'll want. Do not try to put everything in one layer, even if all of your data is in one file. 
 
 If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
 you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). 
 Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish)
-and more detailed (18+), plus separate ones or all tunnels, all bridges. 
-
+and more detailed (18+), plus separate ones for all tunnels and bridges. 
 
 One applicable rule that is applicable for nearly every tilemill map is that you should have a layer 
 solely dedicated to labels :)  
 
-what programs do I use to edit my data ? 
-- you can edit your code within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). 
-this is especially useful when you have multiple MSS files in your browser. If you edit your file in your text editor, tilemill will automatically
-should automatically detect the changes and allow you to click save within tilemill [verify]
+*what programs do I use to edit my stylesheets (.mss) and my project file (.mml)?* 
+- You can edit them within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is is especially useful when you have multiple MSS files in your browser. If you edit and save your file in your text editor, tilemill will automatically detect the changes, refresh, and display the changes. 
 
-For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other tilemill users to use single quotes. 
+* For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other tilemill users to use single quotes. 
 
 * the order of your MSS files, from left to right within your tilemill - does not matter). 
 Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
-
 
 * Also, if you do not know by now, you can launch multiple instances of tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason. 
 
 * You can access Tilemill through your web browser. In the terminal, go to the directory where tilemill install is located (ADD this). In this directory, type in: ```./index.js --server=true```.  
 Now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
 
-=== 
+---
 
 **Inheritance**
 
@@ -102,6 +96,7 @@ CSS saves you time by inheritance, so very basic:
  for zoom 14 and higher, it will have ALL of those characteristics that are included in first selection, except for the text-size is now 11.  
  Also note that it's standard practice to use >=  when you write out your zoom queries and keep it consistent. Wish I knew why, but I haven't had any problems result from adapting this. 
  
+---
 
 ==== Styling === 
 
@@ -109,6 +104,8 @@ ohh, ahh, so how do I Make stuff look purdy ?
 
 
 - Check out the comp-op page.  http://www.mapbox.com/tilemill/docs/guides/comp-op/
+
+---
 
 ===Reading the API=== 
 
@@ -124,7 +121,7 @@ This url path assumes that imagename.png is located in a subfolder of your proje
 
 Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless." They should be  256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
 
-
+--- 
 ===Attachments====
 
 When you see the :: being used, they're called attachments. 
@@ -456,27 +453,26 @@ One drawback that i'm immediately noticing too, to styling your markers in tilem
 
 ====
 
-My styling isn't displaying das I intended ? Help ? 
+*My styling isn't displaying as I intended? Help?!* 
 
-Most common culprit of this is that: 
-- your data isn't included in the layer you're styling! 
+Most common culprit of this is that your data isn't included in the layer you're styling! 
 Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)(NOTE: There may be some cases where this isn't correct - especially if you have many features in your layer) so follow the next step:  
 
 you're using SQL, put your query into an SQL editor like pgadmin. 
 
 
 ==== 
-Extra Resources, Great tools/Examples:
+**Extra Resources, Great tools/Examples**:
 
-Where are some great examples of carto in action ?! 
+*Where are some great examples of carto in action?!* 
 
 (this listed ended up getting posted at: )
 see: http://gis.stackexchange.com/questions/62348/is-there-a-carto-css-gallery-which-also-contains-code/62824#62824
 
-Cartocc: 
+*Cartocc*: 
 
 Cartocc is a npm (module?) that is designed for people to collaborate together on tilemill projects. In most cases, your database names, 
-the path to your JSON files will be different than your collaborators. Using this, you can customize your project settings. 
+the path to your JSON files will be different than your collaborators. Using this, you can customize your project settings 
 
 See for more details: https://github.com/yohanboniface/CartoCC
 
