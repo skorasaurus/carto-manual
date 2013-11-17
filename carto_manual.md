@@ -139,70 +139,69 @@ you can name your selector whatever you want, it's arbitrary.
 
  Note that newsymbol is not a special keyword but an arbitrary name chosen by the user. To help keep track of different symbolizers you can name additional symbolizers whatever makes sense for the situation. Some examples: #road::casing, #coastline::glow_inner, #building::shadow.
 
-Returning to our previous example, declaring the second rule will add a blue glow on top of the red line instead of replacing it:
+To recap what was written there, the second rule will add a blue glow on top of the red line instead of replacing it:
 ```
 #layer {
    line-color: red;
-   line-width: 1;
+   line-width: 4;
 }
 
 #layer::glow {
    line-color: blue;
    line-opacity: 0.5;
-   line-width: 4;
+   line-width: 8;
 }  
 ```
+![Example 001](https://github.com/skorasaurus/carto-manual/raw/master/img/example_001.png)
 
-This glow is only possible because of the line-opacity rule. Try removing that and then click save. You'll now only see a blue line. 
+This glow is only possible because of the line-opacity rule. Try removing that and then click save. 
+You'll now only see a blue line, as shown in the image below: 
+
+![Example 002](https://github.com/skorasaurus/carto-manual/raw/master/img/example_002.png)
 
 Important! 
-Remember the, painter's algorithm. One of the most important concepts that helped me understand Tilemill. 
+Remember the painter's algorithm ! One of the most important concepts that helped me understand Tilemill. 
 
-WITH ATTACHMENTS, 
-Objects are drawn over objects. Lines, polygons (objects?) that are written first in the MSS file will be drawn first, 
-later objects will be drawn over the earlier ones. 
-
-Let's explain how this works with attachments and the previous example, 
-if you remove the line-opacity and rerender, you'll see just a blue line. 
-
+Let's explain how this works with attachments and the previous example. As you saw in the most recent example, you only saw a blue line. 
 
 but if we reverse the two colors, like the following : 
 
 ```
-#countries {
+#layer {
    line-color: red;
+   line-width: 8;
+}
+
+#layer::glow {
+   line-color: blue;
    line-width: 4;
 }
-
-#countries::glow {
-   line-color: blue;
-   line-width: 2;
-}
 ```
 
-In this case, you will see a blue line with a red outline or a red glow ! Why ? the red line with a width of 4, was drawn first, 
-and then a line color blue, with a width of 2, was drawn on top of the red line. 
-
-With attachments, the line is drawn over the previous object ! 
-
-If you don't use an attachment, like: 
+![Example 003](https://github.com/skorasaurus/carto-manual/raw/master/img/example_003.png)
 
 
+In this case, you will see a blue line with a red outline or a red glow! Why? the red line with a width of 8, was drawn first, and then the blue line, with a width of 4, was drawn above the red line. 
+
+With attachments, the line is drawn over the previous object! This is the painter's algorithm! 
+
+
+However, if you do not use attachments, 
 ```
 #countries {
    line-color: red;
-   line-width: 4;
+   line-width: 8;
 }
 
 #countries {
    line-color: blue;
-   line-width: 2;
+   line-width: 4;
 }
 ```
-you'll only end up with a blue line that is 2 pixels wide, because the results are overwritten. 
+you'll only end up with a blue line that is 4 pixels wide. Without attachments, the code in the second selector only
+will be used. 
 
 If you use attachments consecutively, like: 
-
 ```
 #layer::first {
    line-color: red;
@@ -214,12 +213,12 @@ If you use attachments consecutively, like:
 }
 ``` 
 They will have the same action as the early image (not immediately before, but the 2nd one before this example)... 
-the blue glow will be atop the red line. For simplicity's sake, you shouldn't need to do this, just remove the attachment from
-the first layer
+the blue glow will be atop the red line. For simplicity's sake, you shouldn't need to do this, just remove the attachment from the first layer/ 
 
 
 (http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
 
+In addition to attachments, the painter's algorithm applies to the entire mss file. Lines, points, and polygons that are written first in the MSS file will be drawn first. Any lines, polygons, and points that are coded later will be drawn over the earlier ones. 
 
 Now, Attachment style: 
 
