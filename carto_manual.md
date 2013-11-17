@@ -64,18 +64,14 @@ For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use 
 Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
 
 
-* Also, if you do not know by now, you can launch multiple instances of tilemill. useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason. 
+* Also, if you do not know by now, you can launch multiple instances of tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason. 
 
-* You can access Tilemill through your web browser. Do this by: In the terminal, go to the terminal where your tilemill install is located (ADD this). In your directory, type in: ./index.js --server=true 
-now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
-
-(SUPER user alert, ignore the following paragraph if you're not running tilemill master.)If your master is from september 26, 2013 or newer 
-https://github.com/mapbox/tilemill/commit/03ffc6353fddf42a5c965710dd4c9d5e4b6ae65a
-use 127.0.0.1:20008 instead)
+* You can access Tilemill through your web browser. In the terminal, go to the directory where tilemill install is located (ADD this). In this directory, type in: ```./index.js --server=true```.  
+Now, you can go to your web browser and type in localhost:20009 and your tilemill will be there. 
 
 === 
 
-==**Inheritance**==
+**Inheritance**
 
 you'll want to be the field's name in single quotes. (if it's a text)
 
@@ -100,6 +96,7 @@ CSS saves you time by inheritance, so very basic:
   [zoom>=14] {
     text-size:11;
     }
+}    
 ```
  Here, for zoom 13 and higher, the text-min-distance is now 50 and the rest of the characteristics that are included in first selection,
  for zoom 14 and higher, it will have ALL of those characteristics that are included in first selection, except for the text-size is now 11.  
