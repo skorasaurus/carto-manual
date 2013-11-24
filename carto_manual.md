@@ -40,7 +40,8 @@ First things first (aka: things that in tilemill and that I really wish I knew w
  *Should I make one for all roads? railways? Labels?* 
  - This question really confused me as a newbie tilemill user. 
  This is a question is a bit difficult to answer because it depends on the map that you're making. 
-Generally, The more features that your map will include, the more layers that you'll want. Do not try to put everything in one layer, even if all of your data is in one file. 
+Generally, The more features that your map will include, the more layers that you'll want. 
+Do not try to put everything in one layer, even if all of your data is in one file. 
 
 If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
 you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). 
@@ -55,8 +56,9 @@ solely dedicated to labels :)
 
 * For writing selectors like ``` highway='specifictypeofstreetforexample' ``` use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other tilemill users to use single quotes. 
 
-* the order of your MSS files, from left to right within your tilemill - does not matter). 
-Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember. 
+* The order of the MSS files (from left to right) within tilemill does not matter. 
+Neither do the names of the MSS files - they do not have to match the name of your layers. 
+Use whatever names that are easy for you to remember. 
 
 * Also, if you do not know by now, you can launch multiple instances of tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason. 
 
@@ -347,25 +349,25 @@ You can also use negatives as a selector in carto, by using: !=
 
 (display_designation is the name of a row in your data )
 
-move me below 
+
 bFlood> how do you change the drawing order in Tilemill?
 <ybon> bFlood: you can change the order of the layers
 <bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window?
 <ybon> the layers window
 <ybon> drag the icon on the left
 
-As stated earlier, you want your layers to only include the geo_data that you want, BUT you organize your 
-by uses. 
+As stated earlier, you want your layers to only include the data that you want to select. 
 
 In the following example, here's a postgresql query of a railway layer. 
  like the following with way, railway as your column names. 
 
- SELECT way, railway, CASE WHEN railway in ('spur','siding') THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL ORDER BY z_order) as rail",
+ ```SELECT way, railway, CASE WHEN railway in ('spur','siding') THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL ORDER BY z_order) as rail", ```
 
- 'Main' and 'yard' now become selectors that you can reference in your mss files. 
+ 'Main' and 'yard' now become selectors that you can reference in your layers!
 
 
-so you can reference yard, and as a selector and it will represent that selection you made in the SQL layer. (when railway row has values of spur or siding)
+so you can use 'yard' as a selector and it will represent that selection you made in the SQL layer. 
+In the above (when railway row has values of spur or siding)
 
 
 ```
