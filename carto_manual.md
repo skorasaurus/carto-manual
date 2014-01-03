@@ -220,7 +220,16 @@ the blue glow will be atop the red line. For simplicity's sake, you shouldn't ne
 
 (http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
 
-In addition to attachments, the painter's algorithm applies to the entire mss file. Lines, points, and polygons that are written first in the MSS file will be drawn first. Any lines, polygons, and points that are coded later will be drawn over the earlier ones. 
+And you already know, 
+In addition to attachments, the painter's algorithm also applies to the entire mss file. Lines, points, and polygons that are written first in the MSS file will be drawn first. Any lines, polygons, and points that are written later in the file will be drawn over the earlier ones. 
+
+There's also on last affect on the drawing order of features in Tilemill which is done by the layers (FIXME)
+
+<ybon> bFlood: you can change the order of the layers
+<bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window?
+<ybon> the layers window
+<ybon> drag the icon on the left
+
 
 Now, Attachment style: 
 
@@ -254,23 +263,7 @@ first version is a little easier to read :)
 AJ Ashton - 
 I don't really have a preference and will do either or both depending on the project and the data. But for OSM-Carto I think the no-repeat approach is a good fit, and it's good to have that kind of consistency on a collaborative project.
 
-
-But remember, that if you are using multiple attachments: 
-
-like: 
-```
-
-```
-
-and 
-``` 
-
-
-```
-Even though you have used a selector in the first attachment, the 
-
-
-
+D
 (What's the diff between:
 ``` 
 #place::small[type='neighbourhood'][zoom>=13][zoom<=20] 
@@ -336,7 +329,7 @@ Tips:
 <ajashton> #layer[field1=foo], #layer[field2=bar] is an OR operation
 <bFlood> sorry, meant OR
 <bFlood> got it, thx
-<ajashton> you can also use nesting, like #layer { [field1=foo],[field2=bar] { /* style */ } } ``` 
+<ajashton> you can also use nesting, like ``` #layer { [field1=foo],[field2=bar] { /* style */ } } ``` 
 
 <bFlood> one more, for complex expressions can you use parens to separate the logic: #layer {[field3=baa],( [field1=foo][field2=bar])
 <ajashton> bFlood, no parens. Everything between commas is totally separate
@@ -350,11 +343,6 @@ You can also use negatives as a selector in carto, by using: !=
 (display_designation is the name of a row in your data )
 
 
-bFlood> how do you change the drawing order in Tilemill?
-<ybon> bFlood: you can change the order of the layers
-<bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window?
-<ybon> the layers window
-<ybon> drag the icon on the left
 
 As stated earlier, you want your layers to only include the data that you want to select. 
 
@@ -370,19 +358,15 @@ so you can use 'yard' as a selector and it will represent that selection you mad
 In the above (when railway row has values of spur or siding)
 
 
-```
-#railway[type='yard']
+``` #railway[type='yard']
 {
   your rules for yard
-}
-``` 
+} ``` 
 
-```
-#railway[type='main']
+``` #railway[type='main']
 {
   your rules for main
-}
-```
+} ```
 
 see: https://github.com/hotosm/HDM-CartoCSS/blob/master/roads.mss
 
