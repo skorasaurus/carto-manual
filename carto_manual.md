@@ -1,4 +1,4 @@
-===So what is Carto ?=== 
+**===So what is Carto ?===**
 
 Mapnik is a popular tool to render, that is display, geographic information into images. 
 
@@ -9,8 +9,7 @@ Then, carto (also known as CartoCSS, but for the rest of this manual, it will be
 It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill. 
 
 
-== Organizing your data == 
-
+**== Organizing your data ==**
 Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
 Make sure that data is in the same projection used in Tilemill, EPSG:4326. 
 
@@ -34,22 +33,31 @@ Shop is your column name, planet_osm_point is your table name and points is an a
 
 
 ----
-First things first (aka: things that in tilemill and that I really wish I knew when I started using tilemill:
+**==First things first==**_(aka: things that in tilemill and that I really wish  knew when I started using tilemill and should know by now if you're reading this. 
 
  *What data should go in each layer?* 
+ 
  *Should I make one for all roads? railways? Labels?* 
- - This question really confused me as a newbie tilemill user. 
- This is a question is a bit difficult to answer because it depends on the map that you're making. 
-Generally, The more features that your map will include, the more layers that you'll want. 
-Do not try to put everything in one layer, even if all of your data is in one file. 
+ - This question really confused me as a newbie tilemill user and it is difficult to answer because it depends on the map that you're making and the sources of your data. 
+ 
+Generally, the more features that your map will include, the more layers that you'll want. 
 
-If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, 
-you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). 
+Making a simple map with only one 
+do not put everything in one layer, even if all of your data is in one file. 
+
+If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc) (And you're likely using postGIS data sources).  
 Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish)
 and more detailed (18+), plus separate ones for all tunnels and bridges. 
 
 One applicable rule that is applicable for nearly every tilemill map is that you should have a layer 
 solely dedicated to labels :)  
+
+Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill.  
+But: 
+If you are unsure, just create its own layer for it.
+(This only applies to postGIS queries where you can filter ). 
+
+
 
 *what programs do I use to edit my stylesheets (.mss) and my project file (.mml)?* 
 - You can edit them within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is is especially useful when you have multiple MSS files in your browser. If you edit and save your file in your text editor, tilemill will automatically detect the changes, refresh, and display the changes. 
