@@ -1,19 +1,27 @@
 **===So what is Carto ?===**
 
-Mapnik is a popular tool to render, that is display, geographic information into images. 
+Mapnik is a popular tool to render, _that is to display_, geographical information into images. 
 
-Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. It's very difficult to read. In 2009(ish?), cascadenik was made to help simplify this. 
+Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. This XML is very difficult to read. In 2009(ish?), cascadenik was made to help simplify this. 
 
-Then, carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and is superceding cascadenik. 
+Then, Carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and  superceded cascadenik. 
 
 It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill. 
 
 
 **== Organizing your data ==**
-Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/) and maybe something else. 
+Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. 
 Make sure that data is in the same projection used in Tilemill, EPSG:4326. 
 
-If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets. 
+If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets.
+
+- If you are using shapefiles, you'll want run Shapeindex, a tool that improves performance for shapefiles in Tilemill, on each shapefile. Mac and Linux users already have Shapeindex installed through Mapnik but Windows users will need to download [Shapeindex for Windows][] before continuing. 
+
+To run Shapeindex on Mac and Linux, go to the terminal, move to directory containing the shp file and run shapeindex like: 
+
+```shapeindex land-polygons-split-3857.shp```
+
+[Shapeindex for Windows]: http://mapnik.s3.amazonaws.com/dist/archive/shapeindex-2.2.0-win-x86_32.zip
 
 SQL Queries: 
 
@@ -328,8 +336,8 @@ Tips:
 -  and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by 
 -  always adding a new line after a comma, like this:
 
-```#parkpoint[zoom=10][display_designation = 'National Park'],
-    #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
+``` #parkpoint[zoom=10][display_designation = 'National Park'],```
+   ``` #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
     } ```
 ```
 <bFlood> ajashton: is there a way to perform boolean ops between filters? so instead of #layer [field=foo][field=bar]  we could do [field1=foo] AND [field2=bar]?
@@ -472,22 +480,23 @@ See for more details: https://github.com/yohanboniface/CartoCC
 Also written by the author of cartocc, is the carto-sublime package in early development:
 https://github.com/yohanboniface/Carto-sublime
 
+--------
+**i need help?!**
 
-=====
-i need help?! checkout:
+checkout:
+``` #mapbox on freenode (irc)``` 
+[support.mapbox.com](http://support.mapbox.com), 
+and [gis.stackexchange.com](http://gis.stackexchange.com )
 
-#mapbox on freenode (irc)
-support.mapbox.com 
-and the gis.stackexchange
+Debugging your crashes: 
 
-for crashing: 
-
-if you're using ubuntu, go to the directory where tilemill is installed in your terminal, , and then type in ./index.js 
-- tilemill will startup. /usr/share/mapbox/
+if you're using ubuntu, go to the directory where tilemill is installed (likely /usr/share/mapbox/) in your terminal, then type in ```./index.js ``` 
+- tilemill will startup and try to reproduce your crash. 
 
 mac - i think yeah look for ~/Library/Logs/DiagnosticReports/node
 (if its a node error)
 
+(add more from convos with dane)
 
 ENHANCEMENT TICKET TO Make: 
 I've made a change, for example, the color of a landuse in the stylesheet, and it'll zoom into where I last saved, great. So, I see how the change affected in my immediate area, but if I want to see quickly, this other location ((within my area)) that also has this landuse, I have to zoom out, and then zoom back into the other area... 
