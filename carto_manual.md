@@ -279,7 +279,7 @@ first version is a little easier to read :)
 AJ Ashton - 
 I don't really have a preference and will do either or both depending on the project and the data. But for OSM-Carto I think the no-repeat approach is a good fit, and it's good to have that kind of consistency on a collaborative project.
 
-D
+
 (What's the diff between:
 ``` 
 #place::small[type='neighbourhood'][zoom>=13][zoom<=20] 
@@ -320,6 +320,7 @@ line-color: black;
 ```
 
 In the above rail instance, the perpendicular-dashes are drawn first, then the base-line are drawn. 
+(ADD IMAGE)
 
 
 ====================
@@ -338,8 +339,8 @@ Tips:
 
 ``` #parkpoint[zoom=10][display_designation = 'National Park'],```
    ``` #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
-    } ```
-```
+    }``` 
+    
 <bFlood> ajashton: is there a way to perform boolean ops between filters? so instead of #layer [field=foo][field=bar]  we could do [field1=foo] AND [field2=bar]?
 <ajashton> #layer[field1=foo][field2=bar] is an AND operation
 <ajashton> #layer[field1=foo], #layer[field2=bar] is an OR operation
@@ -352,12 +353,13 @@ Tips:
 <ajashton> down side is that `x AND (y OR z)` has to instead be `(x AND Y) OR (x AND z)`
 <ajashton> (not in that syntax, tho)
 
-You can also use negatives as a selector in carto, by using: !=
-
+You can also use negatives as a selector in carto, by using: ``` != ```
+For example, the following code will select all items(?) that DO NOT have a value of National Park OR National Park & Preserve by: 
 ``` [display_designation != 'National Park'][display_designation != 'National Park & Preserve'] ``` 
 
 (display_designation is the name of a row in your data )
 
+(Note: This selection could also be done through a POSTGRESQL layer if you're using it). If you are using POSTGRESQL, writing a query (query, may not be the correct term), is preferred because it will be quicker in rendering speed. 
 
 
 As stated earlier, you want your layers to only include the data that you want to select. 
@@ -398,18 +400,14 @@ a more advanced example:
 
 Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. 
 This sort of thing shouldn’t work, or should perhaps throw a warning:
+
 ```
-#foo[bar=1] { opacity: 0.2 }
-#foo[bar=2] { opacity: 0.8 }
+#foo[bar=1] { opacity: 0.2 }```
 ``` 
+#foo[bar=2] { opacity: 0.8 }``` 
+
 My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict 
-which one would win in this case.
-
-
-
-https://github.com/mapbox/carto/issues/249
-
-
+which one would win in this case. https://github.com/mapbox/carto/issues/249
 
 ====
 Tilemill tooltips: 
@@ -417,8 +415,7 @@ Tilemill tooltips:
 
 Yeah, you want awesome tooltips - (the content that is displayed when a user hover a marker with their cursor or when they click on a marker in your map) -
 
-However, if you want something that is a little complicated, like custom images for each of your points, it can stil be 
-done although I would do this through leaflet instead of plotting them on a map in tilemill. 
+However, if you want something that is a little complicated, like custom images for each of your points, it can be done through Tilemill although I would consider you to use leaflet for your tooltips instead of plotting them on a map in tilemill. 
 
 For example, I wanted to change the width of the tooltip so I could have a larger image display without 
 the user having to scroll, as shown in the picture: 
@@ -426,10 +423,11 @@ the user having to scroll, as shown in the picture:
 
 What you'll need to do: 
 
-So, the default styling for the Tooltips is located at: https://github.com/mapbox/wax/blob/master/theme/controls.css
+The default styling for the Tooltips is located at: https://github.com/mapbox/wax/blob/master/theme/controls.css
 
-Look for the relevant class and property within the CSS file, and place your edited code within the 
-in this case, it's the class map-tooltip (shown below)
+Look for the relevant class and property within the CSS file, and place your edited CSS code, surrounded by <style> and </style>
+ within the tooltip. 
+in the example below , it's the class map-tooltip:
 
 ```<style>
 .map-tooltip {
@@ -437,12 +435,12 @@ in this case, it's the class map-tooltip (shown below)
 }
 </style>```
 
-And insert the <style> and </style> surrounding the css code
 
 As mentioned here- http://support.mapbox.com/discussions/tilemill/1460-customizing-the-tool-tips
-The changed width of the tooltip will not appear in Tilemill after. once you upload them to mapbox's server and view the your map online, 
-you will see your changes. 
-Some changes, like the opacity of the tooltip box, will display within Tilemill. 
+Some changes to the CSS (like changing the width of the tooltips) will not appear in Tilemill and only will appear 
+after you upload your map to Mapbox. You can then view the your map online to confirm your changes. 
+
+Other modifications to the CSS, like the opacity of the tooltip box, will display within your Tilemill project. 
 
 Tooltips: 
 https://github.com/mapbox/wax/blob/master/theme/controls.css
@@ -453,22 +451,22 @@ https://github.com/mapbox/wax/blob/master/theme/controls.css
 One drawback that i'm immediately noticing too, to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again, 
 
 ====
-
+** Other Common questions:**
 *My styling isn't displaying as I intended? Help?!* 
 
-Most common culprit of this is that your data isn't included in the layer you're styling! 
-Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)(NOTE: There may be some cases where this isn't correct - especially if you have many features in your layer) so follow the next step:  
+Most common cause of this is that your data isn't included in the layer you're styling! 
+Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)(NOTE: There may be some cases where this isn't correct - especially if you have many features in your layer) 
+If you're using SQL, put your query into an SQL editor like pgadmin. 
 
-you're using SQL, put your query into an SQL editor like pgadmin. 
-
-
-==== 
-**Extra Resources, Great tools/Examples**:
-
-*Where are some great examples of carto in action?!* 
+*Where are some great examples of carto in action?! with accompanying code?* 
 
 (this listed ended up getting posted at: )
 see: http://gis.stackexchange.com/questions/62348/is-there-a-carto-css-gallery-which-also-contains-code/62824#62824
+
+ 
+==== 
+**Extra Resources, Great tools/Examples**:
+
 
 *Cartocc*: 
 
