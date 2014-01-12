@@ -140,8 +140,7 @@ This url path assumes that imagename.png is located in a subfolder of your proje
 Tip: For images, images that you use for polygon-pattern-file or map-background should be "seamless." They should be  256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)
 
 --- 
-===Attachments====
-
+**Attachments**
 When you see the :: being used, they're called attachments. 
 
 These are pretty damn dope, extend the capabilities of Tilemill, extend your mapmaking capabilities and wish I learned these earlier.
@@ -323,29 +322,27 @@ In the above rail instance, the perpendicular-dashes are drawn first, then the b
 (ADD IMAGE)
 
 
-====================
+___
 Selections/selectors within the Layer:
 
 There are times when even if you filter the objects that you want in your layer, 
 you want to customize styling based on certain properties within your layer. 
 
-Tips: 
-- item
+-  Adding a comma starts a whole new selector - meaning aspects of your previous selector (like the layer and zoom level) are not considered. So you need to repeat yourself a bit.
 
--  Adding a comma starts a whole new selector - meaning aspects of your previous selector 
--  like the layer and zoom level) are not considered. So you need to repeat yourself a bit 
--  and include #parkpoint[zoom=10] after your comma. It's easier to think about the separation commas cause by 
--  always adding a new line after a comma, like this:
+For example, if you want to add a style to display for only 2 types of parks at only level 10, and you want the style to apply to either park, you would repeat the zoom level and the park_type twice. 
 
-``` #parkpoint[zoom=10][display_designation = 'National Park'],```
-   ``` #parkpoint[zoom=10][display_designation = 'National Park & Preserve'] {
-    }``` 
+Like the following: ``` #parkpoint[zoom=10][parktype = 'National Park'],```  
+   ``` #parkpoint[zoom=10][parktype = 'National Park & Preserve']  
+   { your code  
+    }```  
+    
+As you notice, I started a new line following the first parkpoint in the example and 
+it's helps yourself to be consistent and organized by using a new line after a comma. 
     
 <bFlood> ajashton: is there a way to perform boolean ops between filters? so instead of #layer [field=foo][field=bar]  we could do [field1=foo] AND [field2=bar]?
 <ajashton> #layer[field1=foo][field2=bar] is an AND operation
 <ajashton> #layer[field1=foo], #layer[field2=bar] is an OR operation
-<bFlood> sorry, meant OR
-<bFlood> got it, thx
 <ajashton> you can also use nesting, like ``` #layer { [field1=foo],[field2=bar] { /* style */ } } ``` 
 
 <bFlood> one more, for complex expressions can you use parens to separate the logic: #layer {[field3=baa],( [field1=foo][field2=bar])
@@ -367,7 +364,7 @@ As stated earlier, you want your layers to only include the data that you want t
 In the following example, here's a postgresql query of a railway layer. 
  like the following with way, railway as your column names. 
 
- ```SELECT way, railway, CASE WHEN railway in ('spur','siding') THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL ORDER BY z_order) as rail", ```
+ ```SELECT way, railway, CASE WHEN railway in ('spur','siding') THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL ORDER BY z_order) as rail",```
 
  'Main' and 'yard' now become selectors that you can reference in your layers!
 
@@ -394,8 +391,8 @@ a more advanced example:
 ```
 
 
-==== 
-==Classes==: 
+___
+**Classes**: 
 
 
 Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. 
@@ -409,7 +406,7 @@ This sort of thing shouldn’t work, or should perhaps throw a warning:
 My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict 
 which one would win in this case. https://github.com/mapbox/carto/issues/249
 
-====
+___
 Tilemill tooltips: 
 (assume you already know what tooltips are...)
 
@@ -450,8 +447,9 @@ https://github.com/mapbox/wax/blob/master/theme/controls.css
 
 One drawback that i'm immediately noticing too, to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again, 
 
-====
+___
 ** Other Common questions:**
+
 *My styling isn't displaying as I intended? Help?!* 
 
 Most common cause of this is that your data isn't included in the layer you're styling! 
@@ -464,7 +462,7 @@ If you're using SQL, put your query into an SQL editor like pgadmin.
 see: http://gis.stackexchange.com/questions/62348/is-there-a-carto-css-gallery-which-also-contains-code/62824#62824
 
  
-==== 
+___
 **Extra Resources, Great tools/Examples**:
 
 
