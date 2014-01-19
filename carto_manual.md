@@ -8,12 +8,15 @@ Then, Carto (also known as CartoCSS, but for the rest of this manual, it will be
 
 It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill. 
 
+Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/tilemill/docs/guides
+
+This Carto-Manual is for more advanced uses that are not already explained in those guides and gives a general overview of things for Tilemill and Carto that I've learned outside of those guides.  
 
 **== Organizing your data ==**
-Before you even start making your map, organize your geospatial data however you'd like. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. 
+It must be said, before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. 
 Make sure that data is in the same projection used in Tilemill, EPSG:4326. 
 
-If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and shp instead of geojson or spreadsheets.
+If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and SHP instead of geojson or spreadsheets.
 
 - If you are using shapefiles, you'll want run Shapeindex, a tool that improves performance for shapefiles in Tilemill, on each shapefile. Mac and Linux users already have Shapeindex installed through Mapnik but Windows users will need to download [Shapeindex for Windows][] before continuing. 
 
@@ -25,19 +28,26 @@ To run Shapeindex on Mac and Linux, go to the terminal, move to directory contai
 
 SQL Queries: 
 
-Additionally: If you're using a postgis DB, you want your layers to be as specific as possible. Just as using ```select * FROM yourtablename``` is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map. 
+If you're using a postgis DB, you want your layers to be as specific as possible. Just as using ```select * FROM yourtablename``` is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map. 
 
 Here's a very simple SQL query for a layer: 
 
 ```
- (select shop from planet_osm_point where shop is not null) as points
+ (select shop,way from planet_osm_point where shop is not null) as points
 ``` 
 
 (if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)
 
 Let's show what this means: 
 
-Shop is your column name, planet_osm_point is your table name and points is an arbitrary name. You can name it whatever you want. 
+Shop is your column name, planet_osm_point is your table name and points is an arbitrary name at this time. You can name it whatever you want. If you used osm2pgsql to import your data, the column names in your postgis database are in most* the key parts of OSM tags. (remember for osm tags, a tag is key=value ... e.g. highway=residential)
+One exception to this is the 'way' column. The way column represents all the geographic coordinates. You will want to include the way column each time  
+
+If you are interested in only selecting restaurants,bars, and pubs for a layer, then your layer should only include points that are restaurants, bars, and pubs!
+
+This query would be: 
+
+```(select way, name, amenity FROM planet_osm_point WHERE amenity IN ('restaurant','pub','bar')) AS grub``` 
 
 
 ----
@@ -332,7 +342,10 @@ you want to customize styling based on certain properties within your layer.
 
 For example, if you want to add a style to display for only 2 types of parks at only level 10, and you want the style to apply to either park, you would repeat the zoom level and the park_type twice. 
 
-Like the following: ``` #parkpoint[zoom=10][parktype = 'National Park'],```  
+Like the following: 
+
+``` #parkpoint[zoom=10][parktype = 'National Park'],``` 
+
    ``` #parkpoint[zoom=10][parktype = 'National Park & Preserve']  
    { your code  
     }```  
@@ -352,6 +365,7 @@ it's helps yourself to be consistent and organized by using a new line after a c
 
 You can also use negatives as a selector in carto, by using: ``` != ```
 For example, the following code will select all items(?) that DO NOT have a value of National Park OR National Park & Preserve by: 
+
 ``` [display_designation != 'National Park'][display_designation != 'National Park & Preserve'] ``` 
 
 (display_designation is the name of a row in your data )
@@ -361,8 +375,7 @@ For example, the following code will select all items(?) that DO NOT have a valu
 
 As stated earlier, you want your layers to only include the data that you want to select. 
 
-In the following example, here's a postgresql query of a railway layer. 
- like the following with way, railway as your column names. 
+In the following example, here's a postgresql query of a railway layer. like the following with way, railway as your column names. 
 
  ```SELECT way, railway, CASE WHEN railway in ('spur','siding') THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL ORDER BY z_order) as rail",```
 
@@ -373,7 +386,7 @@ so you can use 'yard' as a selector and it will represent that selection you mad
 In the above (when railway row has values of spur or siding)
 
 
-``` #railway[type='yard']
+```#railway[type='yard']
 {
   your rules for yard
 } ``` 
@@ -389,6 +402,29 @@ a more advanced example:
 ```
  SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail",
 ```
+
+___
+**Variables**:
+
+As you already know, variables are a spiffy feature in Tilemill. 
+You begin a variable with the @ symbol and then your name of the variable 
+
+If you haven't seen already, you refer to them in other variables as well. 
+
+```@secondary_line:    #9FA9A8;
+@secondary_fill:    lighten(@secondary_line,10%);
+@secondary_case:    @secondary_line * 0.9;``` 
+
+You've likely already used them for colors, fonts, and text labels. 
+You can also use them for polygon-pattern-file and other similar operations as well in a limited fashion. 
+
+When you use them as a polygon-pattern-fill for example, here's how it's done: 
+
+```@land: url('img/land.png');``` 
+
+```#countries {
+    polygon-pattern-file: @land;
+}```
 
 
 ___
