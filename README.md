@@ -1,24 +1,27 @@
 carto-manual
 ============
+viewable in HTML - the most updated version at: [http://skorasaurus.github.io/carto-manual/](http://skorasaurus.github.io/carto-manual/).
+
+This started out as reference notes that I made for myself and found in mapbox's support or #mapbox over the years 
+to learn carto which is used in [tilemill](http://mapbox.com/tilemill) . 
 
 
-This started out as reference notes that I made for myself or found in mapbox's support or #mapbox over the years, 
-to learn carto which is used in tilemill. 
-
-
-It's an expansion or sequel to the Carto manuals at http://www.mapbox.com/tilemill/docs/manual/carto/ and other things like: 
+It's an expansion or sequel to the Carto manuals at http://www.mapbox.com/tilemill/docs/manual/carto/ and other mapbox guides like: 
 http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ 
 
 
-Designed for intermediate users of Tilemill. 
+Designed for intermediate and experienced users of Tilemill. 
 
 License TBD. 
 
 WARNING/DISCLAIMER/INDEMNITY/YADA/YADA
 
-It's sort of a mess in organization and some of it I rewrote for other users, some is still written for myself, 
-and some of it is just copy and pasted from IRC conversations or mapbox support, so the formatting is hard to read. 
-some of it may even be wrong, or using the wrong terms. 
+It's sort of a mess in organization and some of it I rewrote for other users, some is still written for myself and maybe 
+hard to understand.  
+
+Warning/notes: 
+Much of this information is from IRC conversations or mapbox support, and I give credit to its original authors in most instances (if I forgot, sorry, and let me know if you believe you aren't cited for your original writings). 
+Also, some of this information may even be wrong, or using the wrong terminology.
 
 
 Corrections and pull requests are very welcomed 
