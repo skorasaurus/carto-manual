@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +17,8 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>Then, Carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and superceded cascadenik.</p>
 <p>It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill.</p>
 <p>Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/tilemill/docs/guides</p>
-<p>This Carto-Manual is for more advanced uses that are not already explained in those guides and gives a general overview of things for Tilemill and Carto that I've learned outside of those guides.</p>
-<p><strong>== Organizing your data ==</strong> It must be said, before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. Make sure that data is in the same projection used in Tilemill, EPSG:4326.</p>
+<p>The Carto-Manual is for more advanced uses of Tilemill that are not already explained in MapBox guides and gives a general overview of things for Tilemill and Carto that I've learned outside of those guides.</p>
+<p><strong>== Organizing your data ==</strong> Before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. Make sure that data is in the same projection used in Tilemill, EPSG:4326.</p>
 <p>If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and SHP instead of geojson or spreadsheets.</p>
 <ul>
 <li>If you are using shapefiles, you'll want run Shapeindex, a tool that improves performance for shapefiles in Tilemill, on each shapefile. Mac and Linux users already have Shapeindex installed through Mapnik but Windows users will need to download <a href="http://mapnik.s3.amazonaws.com/dist/archive/shapeindex-2.2.0-win-x86_32.zip">Shapeindex for Windows</a> before continuing.</li>
@@ -28,56 +27,60 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p><pre>shapeindex land-polygons-split-3857.shp</pre></p> 
 <hr />
 
-<p><strong>SQL Queries:</strong></p>
+<p><strong>PostgreSQL Queries:</strong></p>
 <p>If you're using a postgis DB, you want your layers to be as specific as possible. Just as using <pre>select * FROM yourtablename</pre> is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map.</p>
-<p>Here's a very simple SQL query for a layer:</p>
-<pre><pre> (select shop,way from planet_osm_point where shop is not null) as points</pre></pre>
+<p>The syntax for the following SQL queries may be different because of the program that you use to generated your geographical data into Postgresql. If you are using Openstreetmap Data that was converted to Postgresql via osm2pgsql, these queries will be applicable. If you didn't, many changes will apply to these queries.</p>
+<p>Here's a very simple query for a layer:</p>
+<pre> (select shop,way from planet_osm_point where shop is not null) as points</pre>
 <p>(if you're importing data from osm2pgsql see http://wiki.openstreetmap.org/wiki/Osm2pgsql/schema for the names of tables)</p>
 <p>Let's show what this means:</p>
-<p>Shop is your column name, planet_osm_point is your table name and points is an arbitrary name at this time. You can name it whatever you want. If you used osm2pgsql to import your data, the column names in your postgis database are in most* the key parts of OSM tags. (remember for osm tags, a tag is key=value ... e.g. highway=residential) One exception to this is the 'way' column. The way column represents all the geographic coordinates. You will want to include the way column each time</p>
+<p>Shop is your column name, planet_osm_point is your table name and points is an arbitrary name at this time. You can name it whatever you want. If you used osm2pgsql to import your data, the column names in your postgis database are in most instances, the 'key' part of an OSM tag. (remember for osm tags, a tag is key=value ... e.g. highway=residential) One exception to this is the 'way' column. The way column represents all the geographic coordinates. You will want to include the way column every time in your query regardless if you are selecting points, linestrings, or polygons.</p>
 <p>If you are interested in only selecting restaurants,bars, and pubs for a layer, then your layer should only include points that are restaurants, bars, and pubs!</p>
 <p>This query would be:</p>
 <p><pre>(select way, name, amenity FROM planet_osm_point WHERE amenity IN ('restaurant','pub','bar')) AS grub</pre></p>
 
 
-<p><strong>==First things first==</strong> (aka: things that in tilemill and that I really wish knew when I started using tilemill and should know by now if you're reading this.
+<p><strong>==First things first==</strong> (aka: Unwritten guidelines and things that I really wish knew when I started using tilemill, you should know by now if you're reading this, and what inspired me to write this guide.
 </p>
 
 <p><em>What data should go in each layer?</em>
 </p>
 
-<p><em>Should I make one for all roads? railways? Labels?</em> - This question really confused me as a newbie tilemill user and it is difficult to answer because it depends on the map that you're making and the sources of your data.
+<p><em>Should I make one layer for all roads? One for railways? Labels?</em> - This question really confused me as a newbie tilemill user and it is difficult to answer because it depends on the map that you're making and the sources of your data.
 </p>
 
 <p>Generally, the more features that your map will include, the more layers that you'll want.
 </p>
 
-<p>Making a simple map with only one do not put everything in one layer, even if all of your data is in one file.
-</p>
+<!-- <p>Making a simple map with only one do not put everything in one layer, even if all of your data is in one file. (
+</p> -->
 
-<p>If you're making a map that will feature distinct styling for bridges and tunnels and multiple types of highways, you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc) (And you're likely using postGIS data sources). Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish) and more detailed (18+), plus separate ones for all tunnels and bridges.
+<p>If you're making a map that will feature distinct styling for bridges, tunnels and multiple types of highways, you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). (And you're likely using postGIS data sources). Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish), and more detailed (18+), plus separate ones for all tunnels and bridges.
 </p>
 
 <p>One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)
 </p>
 
-<p>Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill. But: If you are unsure, just create its own layer for it. (This only applies to postGIS queries where you can filter ).
+<p>Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill. But: If you are unsure, just create its own layer for it. This is important too for applies to postGIS queries where you can filter ).
 </p>
 
-<p><em>what programs do I use to edit my stylesheets (.mss) and my project file (.mml)?</em> - You can edit them within tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is is especially useful when you have multiple MSS files in your browser. If you edit and save your file in your text editor, tilemill will automatically detect the changes, refresh, and display the changes.
+<p><em>what programs do I use to edit my stylesheets (.mss) and my project file (.mml)?</em> - You can edit them within Tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is is especially useful when you have multiple MSS files in your browser. If you edit and save your file in your text editor, Tilemill will automatically detect the changes, refresh, and display the changes.
 </p>
 
-<p>* For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other tilemill users to use single quotes.
+<p>For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other Tilemill users to use single quotes.
 </p>
 
-<p>* The order of the MSS files (from left to right) within tilemill does not matter. Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
+<p>The order of the MSS files (from left to right) within Tilemill does not matter. Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
 </p>
 
-<p>* Also, if you do not know by now, you can launch multiple instances of tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason.
+<p>* Also, if you do not know by now, you can launch multiple instances of Tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason.
 </p>
 
-<p>* You can access Tilemill through your web browser. In the terminal, go to the directory where tilemill install is located (ADD this). In this directory, type in: <pre>./index.js --server=true</pre>. Now, you can go to your web browser and type in localhost:20009 and your tilemill will be there.
+<p>* You can access Tilemill through your web browser. In the terminal, go to the directory where tilemill install is located (ADD this). In this directory, type in: <pre>./index.js --server=true</pre>. Now, you can go to your web browser and type in localhost:20009 and Tilemill will be there. 
 </p>
+
+<p>You can change the order of the layers <bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window? <ybon> the layers window <ybon> drag the icon on the left.
+(credit Yohan Boniface)</p> 
 <hr />
 
 <p><strong>Inheritance</strong></p>
@@ -106,10 +109,12 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 </pre> Here, for zoom 13 and higher, the text-min-distance is now 50 and the rest of the characteristics that are included in first selection, for zoom 14 and higher, it will have ALL of those characteristics that are included in first selection, except for the text-size is now 11.<br /> Also note that it's standard practice to use <pre>>=</pre> when you write out your zoom queries and keep it consistent. Wish I knew why, but I haven't had any problems result from adapting this.</p>
 <hr />
 <p>==== Styling ===</p>
-<p>ohh, ahh, so how do I Make stuff look purdy ?</p>
+<p>ohh, ahh, so how do I Make stuff look purdy?</p>
 <ul>
 <li>Check out Mapbox's <a href="http://www.mapbox.com/tilemill/docs/guides/comp-op/"> comp-op page</a> if you haven't already </li>
 </ul>
+
+<p>Another resource to keep in mind is seemless backgrounds.</p>
 <hr />
 <p>===Reading the API===</p>
 <p>So, the api can be difficult to read if you're not familiar with reading APIs.</p>
@@ -222,9 +227,6 @@ polygon-pattern-file:url('img/imagename.png');
 <p>There's also on last affect on the drawing order of features in Tilemill which is done by the layers (FIXME)
 </p>
 
-<p><ybon> bFlood: you can change the order of the layers <bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window? <ybon> the layers window <ybon> drag the icon on the left
-</p>
-
 <p>Now, Attachment style:
 </p>
 
@@ -259,7 +261,9 @@ and
 #place [type='neighbourhood'][zoom>=13][zoom<=20] ::small  </pre>
 </p>
 
-<p>multiple textures, casings for lines (if you want a road to be outside with a different color than what the inside of it is...), and so much more can be done with attachments..
+<p> As shown in the examples, attachments are useful to style features (roads, land, etc). 
+
+multiple textures, casings for lines (if you want a road to be outside with a different color than what the inside of it is...), and so much more can be done with attachments..
 </p>
 
 <p>Like this example for a railroad.
@@ -362,7 +366,7 @@ line-color: black;
 <p>see: https://github.com/hotosm/HDM-CartoCSS/blob/master/roads.mss
 </p>
 
-<p>a more advanced example: <pre>SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail&quot;,</pre>
+<p>a more advanced example: from the <a href="https://github.com/hotosm/HDM-CartoCSS/blob/master/roads.mss">HOT rendering</a> <pre>SELECT way, tunnel, bridge, railway, service, CASE WHEN railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) THEN 'yard' WHEN railway='disused' THEN 'disused' WHEN railway='rail' THEN 'main' ELSE 'other' END AS type FROM planet_osm_line WHERE railway IS NOT NULL AND railway!='abandoned' ORDER BY z_order) as rail&quot;,</pre>
 </p>
 <hr />
 
@@ -434,7 +438,7 @@ line-color: black;
 </style></pre>
 </p>
 
-<p>As mentioned here- http://support.mapbox.com/discussions/tilemill/1460-customizing-the-tool-tips Some changes to the CSS (like changing the width of the tooltips) will not appear in Tilemill and only will appear after you upload your map to Mapbox. You can then view the your map online to confirm your changes.
+<p>As mentioned <a href="http://support.mapbox.com/discussions/tilemill/1460-customizing-the-tool-tips">here</a> Some changes to the CSS (like changing the width of the tooltips) will not appear in Tilemill and only will appear after you upload your map to MapBox. You can then view the your map online to confirm your changes.
 </p>
 
 <p>Other modifications to the CSS, like the opacity of the tooltip box, will display within your Tilemill project.
@@ -457,6 +461,9 @@ Depending on the complexity aof your project and your experience with javascript
 <p>Cartocc is a npm (module?) that is designed for people to collaborate together on tilemill projects. In most cases, your database names, the path to your JSON files will be different than your collaborators. Using this, you can customize your project settings</p>
 <p>See for more details: https://github.com/yohanboniface/CartoCC</p>
 <p>Also written by the author of cartocc, is the carto-sublime package in early development: https://github.com/yohanboniface/Carto-sublime</p>
+
+<p>projectmill</p>
+
 <hr />
 <p><strong>I need help?!</strong></p>
 <p>checkout:</p> 
