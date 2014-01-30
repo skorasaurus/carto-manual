@@ -16,9 +16,9 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. This XML is very difficult to read. In 2009(ish?), cascadenik was made to help simplify this.</p>
 <p>Then, Carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and superceded cascadenik.</p>
 <p>It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill.</p>
-<p>Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/tilemill/docs/guides</p>
+<p>Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/Tilemill/docs/guides</p>
 <p>The Carto-Manual is for more advanced uses of Tilemill that are not already explained in MapBox guides and gives a general overview of things for Tilemill and Carto that I've learned outside of those guides.</p>
-<p><strong>== Organizing your data ==</strong> Before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (must be formatted correctly - see http://www.mapbox.com/tilemill/docs/guides/google-docs/), gpx, and maybe something else. Make sure that data is in the same projection used in Tilemill, EPSG:4326.</p>
+<p><strong>== Organizing your data ==</strong></p> Before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (<a href="http://www.mapbox.com/Tilemill/docs/guides/google-docs/">must be formatted correctly </a>, gpx, and maybe something else. Make sure that data is in the same projection used in Tilemill, EPSG:4326.</p>
 <p>If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and SHP instead of geojson or spreadsheets.</p>
 <ul>
 <li>If you are using shapefiles, you'll want run Shapeindex, a tool that improves performance for shapefiles in Tilemill, on each shapefile. Mac and Linux users already have Shapeindex installed through Mapnik but Windows users will need to download <a href="http://mapnik.s3.amazonaws.com/dist/archive/shapeindex-2.2.0-win-x86_32.zip">Shapeindex for Windows</a> before continuing.</li>
@@ -40,17 +40,12 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p><pre>(select way, name, amenity FROM planet_osm_point WHERE amenity IN ('restaurant','pub','bar')) AS grub</pre></p>
 
 
-<p><strong>==First things first==</strong> (aka: Unwritten guidelines and things that I really wish knew when I started using tilemill, you should know by now if you're reading this, and what inspired me to write this guide.
+<p><strong>First things First</strong>: <em> aka: Unwritten guidelines and things that I really wish knew when I started using Tilemill, you should know by now if you're reading this, and what inspired me to write this guide.</a>
 </p>
-
-<p><em>What data should go in each layer?</em>
-</p>
-
-<p><em>Should I make one layer for all roads? One for railways? Labels?</em> - This question really confused me as a newbie tilemill user and it is difficult to answer because it depends on the map that you're making and the sources of your data.
-</p>
-
-<p>Generally, the more features that your map will include, the more layers that you'll want.
-</p>
+<p>
+<em>What data should go in each layer? Should I make one layer for all roads? One for railways? Labels?</em></p> 
+<p> This question really confused me as a newbie Tilemill user and it is difficult to answer because it depends on the map that you're making and the sources of your data.
+</p> Generally, the more features that your map will include, the more layers that you'll want.
 
 <!-- <p>Making a simple map with only one do not put everything in one layer, even if all of your data is in one file. (
 </p> -->
@@ -58,33 +53,27 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>If you're making a map that will feature distinct styling for bridges, tunnels and multiple types of highways, you'll likely have multiple layers there (one for bridges, one for highways, one for tunnels, etc). (And you're likely using postGIS data sources). Many popular stylesheets have 3 separate road stylesheets, one for lower zoom levels (like 10-13ish), medium (14-17ish), and more detailed (18+), plus separate ones for all tunnels and bridges.
 </p>
 
-<p>One applicable rule that is applicable for nearly every tilemill map is that you should have a layer solely dedicated to labels :)
+<p>One applicable rule that is applicable for nearly every Tilemill map is that you should have a layer solely dedicated to labels :)
 </p>
 
 <p>Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill. But: If you are unsure, just create its own layer for it. This is important too for applies to postGIS queries where you can filter ).
 </p>
 
-<p><em>what programs do I use to edit my stylesheets (.mss) and my project file (.mml)?</em> - You can edit them within Tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is is especially useful when you have multiple MSS files in your browser. If you edit and save your file in your text editor, Tilemill will automatically detect the changes, refresh, and display the changes.
+<p><em>What programs do I use to edit my stylesheets (.mss) and my project file (.mml)?</em></p><p> You can edit them within Tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is especially useful when you have many MSS files. If you edit and save your file in your text editor, Tilemill will automatically detect the changes, refresh, and display the changes.
 </p>
 
-<p>For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other Tilemill users to use single quotes.
+<p>For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other Tilemill users to use single quotes. The exception to this is when the field (correct term?) is a number like a zoom level. 
 </p>
 
-<p>The order of the MSS files (from left to right) within Tilemill does not matter. Neither do the names of the MSS files - they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
+<p>The order of the MSS files (from left to right) within Tilemill does not matter. Neither do the names of the MSS files; they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
 </p>
 
-<p>* Also, if you do not know by now, you can launch multiple instances of Tilemill. This is useful if you're working on multiple projects at once or if you want to test out a piece of code real quick in a new project or context, and don't want to make a branch in git for whatever reason.
+<p>You can access Tilemill through your web browser. In the terminal, go to the directory where Tilemill install is located (/usr/share/Tilemill for ubuntu users). In this directory, type in: <pre>./index.js --server=true</pre>. Now, you can go to your web browser and type in localhost:20009 and Tilemill will be there. This is a very handy tool. You can now work on multiple projects at one time. If you want to test out a snippet of code real quick in a new project or context, and don't want to make a branch in git for whatever reason, you can now do so. 
 </p>
 
-<p>* You can access Tilemill through your web browser. In the terminal, go to the directory where tilemill install is located (ADD this). In this directory, type in: <pre>./index.js --server=true</pre>. Now, you can go to your web browser and type in localhost:20009 and Tilemill will be there. 
-</p>
-
-<p>You can change the order of the layers <bFlood> ok, how is that done from the UI? in the carto css or via the little layers popup window? <ybon> the layers window <ybon> drag the icon on the left.
-(credit Yohan Boniface)</p> 
 <hr />
 
 <p><strong>Inheritance</strong></p>
-<p>you'll want to be the field's name in single quotes. (if it's a text)</p>
 <p>CSS saves you time by inheritance, so very basic:</p>
 <p><pre>
  #place[type='neighbourhood'][zoom>=13][zoom<=20] {
@@ -111,10 +100,11 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>==== Styling ===</p>
 <p>ohh, ahh, so how do I Make stuff look purdy?</p>
 <ul>
-<li>Check out Mapbox's <a href="http://www.mapbox.com/tilemill/docs/guides/comp-op/"> comp-op page</a> if you haven't already </li>
+<li>Check out Mapbox's <a href="http://www.mapbox.com/Tilemill/docs/guides/comp-op/"> comp-op page</a> if you haven't already </li>
+<li>Also check out the <a href"https://www.mapbox.com/blog/colorize-alpha-image-filter"/> image filters </a> (will add more on this)</li> 
+<li>Another resource to keep in mind is seemless backgrounds.</li>
 </ul>
 
-<p>Another resource to keep in mind is seemless backgrounds.</p>
 <hr />
 <p>===Reading the API===</p>
 <p>So, the api can be difficult to read if you're not familiar with reading APIs.</p>
@@ -126,13 +116,9 @@ polygon-pattern-file:url('img/imagename.png');
 <p>This url path assumes that imagename.png is located in a subfolder of your project, named img.</p>
 <p>Tip: For images, images that you use for polygon-pattern-file or map-background should be &quot;seamless.&quot; They should be 256x256 or 512x512 in size. If they aren't seemless, you will notice where one tile ends and the other begins (add ugly example)</p>
 
-<hr />
-<hr />
+<p> <strong>Attachments</strong> </p>
 
-<p><strong>Attachments</strong> When you see the :: being used, they're called attachments.
-</p>
-
-<p>These are pretty damn dope: they extend the capabilities of Tilemill, and wish I learned these earlier.
+<p> When you see the :: being used, they're called attachments. These are pretty damn dope: they extend the capabilities of Tilemill, and wish I learned these earlier.
 </p>
 
 <pre>#layername[yourfilter-isthatwhatthisiscalled]::selector 
@@ -140,7 +126,7 @@ polygon-pattern-file:url('img/imagename.png');
 }</pre> You can name your selector whatever you want, it's arbitrary.
 </p>
 
-<p>Also repeated in http://www.mapbox.com/tilemill/docs/manual/carto/ (include?)
+<p>Also repeated in http://www.mapbox.com/Tilemill/docs/manual/carto/ (include?)
 
 <p>Note that newsymbol is not a special keyword but an arbitrary name chosen by the user. To help keep track of different symbolizers you can name additional symbolizers whatever makes sense for the situation. Some examples: <pre> #road::casing, #coastline::glow_inner, #building::shadow.  </pre>
 
@@ -218,13 +204,15 @@ polygon-pattern-file:url('img/imagename.png');
 
 </p>
 
-<p>(http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
+<p>(http://www.mapbox.com/Tilemill/docs/guides/symbol-drawing-order/ explains pretty well, as well, wish this was there when I started)
 </p>
 
 <p>And you already know, In addition to attachments, the painter's algorithm also applies to the entire mss file. Lines, points, and polygons that are written first in the MSS file will be drawn first. Any lines, polygons, and points that are written later in the file will be drawn over the earlier ones.
 </p>
 
-<p>There's also on last affect on the drawing order of features in Tilemill which is done by the layers (FIXME)
+<p>There's also one last affect on the drawing order of features in Tilemill which controlled by the order that the layers appear. 
+<p>You can change the order of the layers, Drag the tiny icon that is to the left of each layers' name in the layers' window, that is located in the lower left hand corner of your screen.
+(credit Yohan Boniface) FIXME, add picture </p> 
 </p>
 
 <p>Now, Attachment style:
@@ -390,13 +378,14 @@ line-color: black;
 <p>When you use them as a polygon-pattern-fill for example, here's how it's done:
 </p>
 
-<p><pre>@land: url('img/land.png');</pre>
+<p><pre>@land: url('img/land.png');
+
+  #countries { 
+  polygon-pattern-file: @land; 
+  }</pre>
 </p>
 
-<p><pre>#countries { polygon-pattern-file: @land; }</pre>
-</p>
-
-<p><em>_</em> <strong>Classes</strong>:
+<p><strong>Classes</strong>:
 </p>
 
 <p>Opacity (and related comp-op) operates on a layer as a whole. However, it’s specified inline with the rest of the rules, which is confusing. This sort of thing shouldn’t work, or should perhaps throw a warning:
@@ -410,13 +399,13 @@ line-color: black;
 <p>My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict which one would win in this case. https://github.com/mapbox/carto/issues/249
 </p>
 
-<p><em>_</em> Tilemill tooltips: (assume you already know what tooltips are...)
+<p>Tilemill tooltips:
 </p>
 
 <p>Yeah, you want awesome tooltips - (the content that is displayed when a user hover a marker with their cursor or when they click on a marker in your map) -
 </p>
 
-<p>However, if you want something that is a little complicated, like custom images for each of your points, it can be done through Tilemill although I would consider you to use leaflet for your tooltips instead of plotting them on a map in tilemill.
+<p>A preface/warning: if you want something that is a little complicated, like custom images for each of your points, it can be done through Tilemill although I would consider you to use leaflet for your tooltips instead of plotting them on a map in Tilemill. 
 </p>
 
 <p>For example, I wanted to change the width of the tooltip so I could have a larger image display without the user having to scroll, as shown in the picture:
@@ -438,7 +427,7 @@ line-color: black;
 </style></pre>
 </p>
 
-<p>As mentioned <a href="http://support.mapbox.com/discussions/tilemill/1460-customizing-the-tool-tips">here</a> Some changes to the CSS (like changing the width of the tooltips) will not appear in Tilemill and only will appear after you upload your map to MapBox. You can then view the your map online to confirm your changes.
+<p>As mentioned <a href="http://support.mapbox.com/discussions/Tilemill/1460-customizing-the-tool-tips">here</a> Some changes to the CSS (like changing the width of the tooltips) will not appear in Tilemill and only will appear after you upload your map to MapBox. You can then view the your map online to confirm your changes.
 </p>
 
 <p>Other modifications to the CSS, like the opacity of the tooltip box, will display within your Tilemill project.
@@ -447,10 +436,10 @@ line-color: black;
 <p>Tooltips: https://github.com/mapbox/wax/blob/master/theme/controls.css - how to change the font ? font is not in there ?! - you cannot unless you have wax on your server, because of security concerns, see:
 </p>
 
-<p>One drawback that i'm immediately noticing to styling your markers in tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again</p>
+<p>One drawback that i'm immediately noticing to styling your markers in Tilemill, is that if you're going to display them on a webpage (using mapbox.js), each time that you want to tweak them or debug it, you'll have to upload the entire project up to the web again</p>
 Depending on the complexity aof your project and your experience with javascript, you may find it easier to style your icons within leaflet/mapbox.js instead of Tilemill. 
 <hr />
-<p><em>* Other Common questions:</em>*</p>
+<p><strong><em>Other Common questions:</em></strong></p>
 <p><em>My styling isn't displaying as I intended? Help?!</em></p>
 <p>Most common cause of this is that your data isn't included in the layer you're styling! Make sure your data is being included by checking the layer features (the little magnifying glass by the circle...)(NOTE: There may be some cases where this isn't correct - especially if you have many features in your layer) If you're using SQL, put your query into an SQL editor like pgadmin.</p>
 <p><em>Where are some great examples of carto in action?! with accompanying code?</em></p>
@@ -458,9 +447,9 @@ Depending on the complexity aof your project and your experience with javascript
 <hr />
 <p><strong>Extra Resources, Great tools/Examples</strong>:</p>
 <p><em>Cartocc</em>:</p>
-<p>Cartocc is a npm (module?) that is designed for people to collaborate together on tilemill projects. In most cases, your database names, the path to your JSON files will be different than your collaborators. Using this, you can customize your project settings</p>
+<p>Cartocc is a npm (module?) that is designed for people to collaborate together on Tilemill projects. In most cases, your database names, the path to your JSON files will be different than your collaborators. Using this, you can customize your project settings</p>
 <p>See for more details: https://github.com/yohanboniface/CartoCC</p>
-<p>Also written by the author of cartocc, is the carto-sublime package in early development: https://github.com/yohanboniface/Carto-sublime</p>
+<p>Also written by the author of cartocc, is the <a href="https://github.com/yohanboniface/Carto-sublime"> carto-sublime package, for the sublime text editor</a> in early development: </p>
 
 <p>projectmill</p>
 
@@ -470,7 +459,7 @@ Depending on the complexity aof your project and your experience with javascript
 
 <pre>#mapbox on freenode (irc)</pre> <a href="http://support.mapbox.com">support.mapbox.com</a>, and <a href="http://gis.stackexchange.com">gis.stackexchange.com</a></p>
 <p>Debugging your crashes:</p>
-<p>if you're using ubuntu, go to the directory where tilemill is installed (likely /usr/share/mapbox/) in your terminal, then type in <pre>./index.js</pre> - tilemill will startup and try to reproduce your crash.</p>
+<p>if you're using ubuntu, go to the directory where Tilemill is installed (likely /usr/share/mapbox/) in your terminal, then type in <pre>./index.js</pre> - Tilemill will startup and try to reproduce your crash.</p>
 <p>mac - i think yeah look for ~/Library/Logs/DiagnosticReports/node (if its a node error)</p>
 <p>(add more from convos with dane)</p>
 <p>ENHANCEMENT TICKET TO Make: I've made a change, for example, the color of a landuse in the stylesheet, and it'll zoom into where I last saved, great. So, I see how the change affected in my immediate area, but if I want to see quickly, this other location ((within my area)) that also has this landuse, I have to zoom out, and then zoom back into the other area... I've had this come up a couple time in my workflows, it'd be a nice enhancement although I have not idea if this is feasible in any way, I'm guessing not.</p>
