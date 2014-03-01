@@ -8,9 +8,10 @@
  -->  <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
 </head>
 <body>
+  
 <p>The Carto Manual <p> 
 More information at: <a href="https://github.com/skorasaurus/carto-manual">https://github.com/skorasaurus/carto-manual</a>
-<div class="col9 doc-content keyline-left prose"> 
+<div class="col9 pad4 doc-content keyline-left prose"> 
 <p><strong>===So what is Carto ?===</strong></p>
 <p>Mapnik is a popular tool to render, <em>that is to display</em>, geographical information into images.</p>
 <p>Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. This XML is very difficult to read. In 2009(ish?), cascadenik was made to help simplify this.</p>
@@ -40,7 +41,7 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p><pre>(select way, name, amenity FROM planet_osm_point WHERE amenity IN ('restaurant','pub','bar')) AS grub</pre></p>
 
 
-<p><strong>First things First</strong>: <em> aka: Unwritten guidelines and things that I really wish knew when I started using Tilemill, you should know by now if you're reading this, and what inspired me to write this guide.</a>
+<p><strong>First things First</strong><em> Unwritten guidelines and things that I really wish knew when I started using Tilemill, you should know by now if you're reading this, and what inspired me to write this guide.</a> </em>
 </p>
 <p>
 <em>What data should go in each layer? Should I make one layer for all roads? One for railways? Labels?</em></p> 
@@ -56,16 +57,16 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>One applicable rule that is applicable for nearly every Tilemill map is that you should have a layer solely dedicated to labels :)
 </p>
 
-<p>Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill. But: If you are unsure, just create its own layer for it. This is important too for applies to postGIS queries where you can filter ).
+<p>Deciding whether to create a layer or specifying in your MSS file for your specfic feature is something that you'll learn more as you work with Tilemill. But: If you are unsure, just create its own layer for it.
 </p>
 
 <p><em>What programs do I use to edit my stylesheets (.mss) and my project file (.mml)?</em></p><p> You can edit them within Tilemill itself. You can also use your own preferred text editor (sublime, notepad, vim, emacs). Editing them within your own preferred text editor is especially useful when you have many MSS files. If you edit and save your file in your text editor, Tilemill will automatically detect the changes, refresh, and display the changes.
 </p>
 
-<p>For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other Tilemill users to use single quotes. The exception to this is when the field (correct term?) is a number like a zoom level. 
+<p>For writing selectors like <pre>highway='specifictypeofstreetforexample'</pre> use single quotes. Double quotes also work in Tilemill, it's just a standard practice by other Tilemill users to use single quotes. The exception to this is when the field (correct term?) is an integer, like a zoom level. 
 </p>
 
-<p>The order of the MSS files (from left to right) within Tilemill does not matter. Neither do the names of the MSS files; they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
+<p>The order of the MSS files' tabs (from left to right) within Tilemill does not matter. Neither do the names of the MSS files; they do not have to match the name of your layers. Use whatever names that are easy for you to remember.
 </p>
 
 <p>You can access Tilemill through your web browser. In the terminal, go to the directory where Tilemill install is located (/usr/share/Tilemill for ubuntu users). In this directory, type in: <pre>./index.js --server=true</pre>. Now, you can go to your web browser and type in localhost:20009 and Tilemill will be there. This is a very handy tool. You can now work on multiple projects at one time. If you want to test out a snippet of code real quick in a new project or context, and don't want to make a branch in git for whatever reason, you can now do so. 
