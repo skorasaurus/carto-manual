@@ -359,6 +359,20 @@ line-color: black;
 </p>
 <hr />
 
+<p><storng>Fonts</strong></p>:
+
+Fonts (typefaces, if you're being pedantic), are effective to set the tone of your map.  
+
+
+If you are unsure of the font's name and style, you can open your font (the .otf file) in Ubuntu with 'Font Viewer' which will display 
+information on your font including its name and the Style. The style is often classified in types like: "Italic", "Bold", "IIBook", or 
+"Bold Italic".
+<p> For ubuntu users, TileMill will read your fonts in your ~/.fonts folder and all of its subfolders, so you can just place your folders in there.</p> 
+When you're experimenting with different fonts, you can declare your font styles at the top of a stylesheet and set them with variables like the following example where I plan on using this font for streets where my font's name is "Avenir Next LT Pro" and its style is "Regular". 
+
+<pre> @streetsfont:  "Avenir Next LT Pro Regular"; 
+</pre>
+
 <p><strong>Variables</strong>:
 </p>
 
@@ -400,7 +414,7 @@ line-color: black;
 <p>My experience has been that opacity gets set just once, for the whole layer, and I’m not sure how to predict which one would win in this case. https://github.com/mapbox/carto/issues/249
 </p>
 
-<p>Tilemill tooltips:
+<p><strong>Tilemill tooltips:</strong>
 </p>
 
 <p>Yeah, you want awesome tooltips - (the content that is displayed when a user hover a marker with their cursor or when they click on a marker in your map) -
