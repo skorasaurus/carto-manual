@@ -16,11 +16,13 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>Mapnik is a popular tool to render, <em>that is to display</em>, geographical information into images.</p>
 <p>Mapnik's code instructs what features (roads, rivers, buildings) to display and what these features should look like (this is known as rendering), is in XML. This XML is very difficult to read. In 2009(ish?), cascadenik was made to help simplify this.</p>
 <p>Then, Carto (also known as CartoCSS, but for the rest of this manual, it will be referred to as Carto) was set out to provide an easier way to write these instructions while taking full advantage of mapnik's rendering capabilities and superceded cascadenik.</p>
-<p>It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill.</p>
-<p>Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/Tilemill/docs/guides</p>
+<p>It's like the CSS language (and less.js), it's used to style maps in the application, Tilemill and its successor, Mapbox-Studio</p>
+<p>Before going any further, be sure that you have read these guides made by MapBox. https://www.mapbox.com/Tilemill/docs/guides and <a href="https://github.com/mapbox/carto/blob/master/docs/latest.md"> MapBox's carto documentation</p>
+
+
 <p>The Carto-Manual is for more advanced uses of Tilemill that are not already explained in MapBox guides and gives a general overview of things for Tilemill and Carto that I've learned outside of those guides.</p>
 <p><strong>== Organizing your data ==</strong></p> Before you even start making your map, ensure your geospatial data is organized and in formats supported by Tilemill. Tilemill supports postgis, SHP, geojson, CSV (<a href="http://www.mapbox.com/Tilemill/docs/guides/google-docs/">must be formatted correctly </a>, gpx, and maybe something else. Make sure that data is in the same projection used in Tilemill, EPSG:4326.</p>
-<p>If you're really particular on performance or want to render large amount of data (like entire countries), go with postgis and SHP instead of geojson or spreadsheets.</p>
+<p>If you're focused on performance or want to render large amount of data (like entire countries), go with postgis and SHP instead of geojson or CSV.</p>
 <ul>
 <li>If you are using shapefiles, you'll want run Shapeindex, a tool that improves performance for shapefiles in Tilemill, on each shapefile. Mac and Linux users already have Shapeindex installed through Mapnik but Windows users will need to download <a href="http://mapnik.s3.amazonaws.com/dist/archive/shapeindex-2.2.0-win-x86_32.zip">Shapeindex for Windows</a> before continuing.</li>
 </ul>
