@@ -31,7 +31,7 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <hr />
 
 <p><strong>PostgreSQL Queries:</strong></p>
-<p>If you're using a postgis DB, you want your layers to be as specific as possible. Just as using <pre>select * FROM yourtablename</pre> is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Simply put, your layer's query should only select the data that you will want to display on your map.</p>
+<p>If you're using a postgis DB, you want your layers to be as specific as possible. Just as using <pre>select * FROM yourtablename</pre> is inefficient in your postgresql queries because you're selecting everything, using select * queries in Tilemill will increase the time needed to load your map. Your layer's query should only select the data that you will want to display on your map.</p>
 <p>The syntax for the following SQL queries may be different because of the program that you use to generated your geographical data into Postgresql. If you are using Openstreetmap Data that was converted to Postgresql via osm2pgsql, these queries will be applicable. If you didn't, many changes will apply to these queries.</p>
 <p>Here's a very simple query for a layer:</p>
 <pre> (select shop,way from planet_osm_point where shop is not null) as points</pre>
@@ -103,9 +103,8 @@ More information at: <a href="https://github.com/skorasaurus/carto-manual">https
 <p>==== Styling ===</p>
 <p>ohh, ahh, so how do I Make stuff look purdy?</p>
 <ul>
-<li>Check out Mapbox's <a href="http://www.mapbox.com/Tilemill/docs/guides/comp-op/"> comp-op page</a> if you haven't already </li>
+<li>Check out Mapbox's <a href="http://www.mapbox.com/tilemill/docs/guides/comp-op/"> comp-op page</a> if you haven't already </li>
 <li>Also check out the <a href"https://www.mapbox.com/blog/colorize-alpha-image-filter"/> image filters </a> (will add more on this)</li> 
-<li>Another resource to keep in mind is seemless backgrounds.</li>
 </ul>
 
 <hr />
