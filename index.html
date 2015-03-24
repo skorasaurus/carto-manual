@@ -364,11 +364,17 @@ line-color: black;
 
 Fonts (typefaces, if you're being pedantic), are effective to set the tone of your map.  
 
-
 If you are unsure of the font's name and style, you can open your font (the .otf file) in Ubuntu with 'Font Viewer' which will display 
 information on your font including its name and the Style. The style is often classified in types like: "Italic", "Bold", "IIBook", or 
 "Bold Italic".
 <p> For ubuntu users, TileMill will read your fonts in your ~/.fonts folder and all of its subfolders, so you can just place your folders in there.</p> 
+<p>In Mapbox-Studio, your fonts must be in same folder (or subdirectory) as the project that you're working on. <pre>(e.g. /Documents/MapBox/project/mycooldakarmap.tm2/)</pre> </p> 
+Then, set the folder to the location of the fonts. In the below example, the fonts are in a folder named fonts.
+
+  <pre> Map { 
+  font-directory: url('fonts/');  </pre> 
+
+
 When you're experimenting with different fonts, you can declare your font styles at the top of a stylesheet and set them with variables like the following example where I plan on using this font for streets where my font's name is "Avenir Next LT Pro" and its style is "Regular". 
 
 <pre> @streetsfont:  "Avenir Next LT Pro Regular"; 
