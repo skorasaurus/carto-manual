@@ -3,7 +3,7 @@ carto-manual
 viewable in HTML - the most updated version at: [http://skorasaurus.github.io/carto-manual/](http://skorasaurus.github.io/carto-manual/).
 
 This started out as reference notes that I made for myself and found in mapbox's support or #mapbox over the years 
-to learn carto which is used in [tilemill](http://mapbox.com/tilemill) . 
+to learn carto which is used in [tilemill](http://mapbox.com/tilemill) .  
 
 
 It's an expansion or sequel to the Carto manuals at http://www.mapbox.com/tilemill/docs/manual/carto/ and other mapbox guides like: 
@@ -12,7 +12,7 @@ http://www.mapbox.com/tilemill/docs/guides/symbol-drawing-order/
 
 Designed for intermediate and experienced users of Tilemill. 
 
-License TBD. 
+License CC BY 4.0
 
 WARNING/DISCLAIMER/INDEMNITY/YADA/YADA
 
